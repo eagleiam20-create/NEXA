@@ -3,7 +3,829 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#090b12">
+<title>NEXA — Knowledge Workspace</title>
+<style>
+:root{
+  --bg:#090b12;--panel:#11141e;--panel2:#171b29;
+  --border:#292e40;--text:#f4f5fb;--muted:#9ca3b7;
+  --purple:#9785ff;--pink:#d99ae8;--green:#77e0b3;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--purple);outline-offset:2px}
+button:disabled{opacity:.55;cursor:not-allowed}
+.app{min-height:100vh}
+.sidebar{position:fixed;inset:0 auto 0 0;width:240px;padding:20px 14px;background:#0d0f17;border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:auto;z-index:10}
+.brand{display:flex;align-items:center;gap:11px;padding:5px 8px 25px}
+.logo{width:40px;height:40px;border-radius:13px;background:linear-gradient(135deg,#9b8aff,#e59bdd);display:grid;place-items:center;color:#151321;font-weight:900;font-size:21px}
+.brand-name{font-size:21px;font-weight:850;letter-spacing:2px}
+.brand-sub{font-size:10px;letter-spacing:1px;color:var(--muted)}
+.nav-label{padding:13px 10px 7px;font-size:10px;letter-spacing:1.5px;color:#778097;font-weight:800}
+.nav-btn{display:flex;align-items:center;gap:11px;width:100%;padding:10px 11px;border:1px solid transparent;border-radius:10px;background:transparent;color:#adb4c9;text-align:left;margin:2px 0}
+.nav-btn:hover{background:#171b29;color:white}
+.nav-btn.active{background:#27223e;border-color:#3e355c;color:#e5dfff}
+.nav-icon{width:20px;text-align:center;font-size:16px}
+.sidebar-bottom{margin-top:auto;padding-top:20px}
+.status{border:1px solid var(--border);background:#11141d;border-radius:12px;padding:13px;font-size:12px}
+.status p{color:var(--muted);font-size:11px;margin:6px 0 0}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);margin-right:7px}
+.main{margin-left:240px;min-height:100vh}
+.topbar{height:65px;position:sticky;top:0;z-index:5;background:#090b12f2;backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:0 27px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+#pageLabel{color:#c5cad9;font-size:13px}
+.top-right{display:flex;align-items:center;gap:8px}
+.local-tag{font-size:10px;color:var(--muted);border:1px solid var(--border);padding:4px 9px;border-radius:20px}
+.content{max-width:1150px;margin:auto;padding:27px}
+.page{display:none}
+.page.active{display:block;animation:fade .18s ease}
+@keyframes fade{from{opacity:.6}to{opacity:1}}
+h1{font-size:clamp(28px,3vw,40px);line-height:1.2;letter-spacing:-1px;margin:0 0 12px}
+h2{font-size:21px;letter-spacing:-.4px}
+h3{font-size:15px}
+p{margin-top:0}
+.muted{color:var(--muted)}
+.eyebrow{font-size:10px;font-weight:800;letter-spacing:2px;color:#b8aaff;margin-bottom:12px}
+.hero{padding:31px;border:1px solid #38304e;border-radius:22px;background:radial-gradient(ellipse at 95% 5%,#7257a53b,transparent 40%),linear-gradient(135deg,#171725,#10121c);position:relative}
+.hero p{max-width:650px;color:#b0b6c9}
+.searchbar{display:flex;gap:8px;padding:7px;background:#0a0c14;border:1px solid #38334c;border-radius:13px;max-width:780px}
+.searchbar input{flex:1;min-width:0;background:transparent;border:0;outline:none;color:white;padding:10px}
+.primary,.secondary,.small,.icon-btn{border-radius:10px;padding:9px 13px;border:1px solid var(--border)}
+.primary{background:linear-gradient(110deg,#9785ff,#d49bdd);color:#171321;font-weight:800;border:0}
+.secondary,.small,.icon-btn{background:var(--panel2);color:var(--text)}
+.small{font-size:12px;padding:6px 10px}
+.icon-btn{width:37px;height:37px;padding:0}
+button:hover{filter:brightness(1.1)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:13px}
+.chip{background:#171a27;color:#d0d3e1;border:1px solid var(--border);border-radius:25px;padding:7px 11px;font-size:12px}
+.section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:27px 0 13px}
+.section-head h2{font-size:18px;margin:0}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.card,.panel{background:linear-gradient(145deg,#131621,#10121a);border:1px solid var(--border);border-radius:16px;padding:18px;min-width:0}
+.card:hover{border-color:#45405e}
+.card-icon{width:39px;height:39px;border-radius:12px;background:#29223f;display:grid;place-items:center;font-size:18px;margin-bottom:12px}
+.card h3{margin:0 0 6px}
+.card p{color:var(--muted);font-size:12px;margin-bottom:13px}
+.card-link{border:0;background:transparent;color:#c0b4ff;font-size:12px;font-weight:750;padding:0}
+.tag{display:inline-block;background:#29233f;color:#c8bbff;font-size:10px;padding:3px 8px;border-radius:6px;margin-bottom:8px}
+.field{display:flex;flex-direction:column;gap:7px;margin:13px 0}
+.field label{font-size:12px;font-weight:700;color:#cbd0df}
+.field input,.field textarea,.field select,.input{width:100%;min-width:0;background:#0b0d15;border:1px solid #303548;color:white;border-radius:10px;padding:11px 12px}
+.field textarea{resize:vertical;min-height:100px}
+.field select option{background:#10131d}
+.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.row .field{flex:1;min-width:130px}
+.output{background:#0b0e16;border:1px solid #303548;border-radius:12px;padding:17px;margin-top:15px;overflow-wrap:anywhere}
+.output h2{margin-top:0}
+.output pre,.code-block{white-space:pre-wrap;overflow-wrap:anywhere;overflow-x:auto;background:#080a10;border:1px solid #252a38;border-radius:10px;padding:14px;font:12px/1.7 Consolas,"Courier New",monospace;color:#dedaff}
+.notice{font-size:11px;color:var(--muted);margin-top:12px}
+.results{display:grid;gap:10px;margin-top:15px}
+.result{padding:14px;border:1px solid var(--border);background:#10131d;border-radius:12px}
+.result h3{margin:0 0 6px}
+.result p{font-size:12px;color:var(--muted);margin:6px 0}
+.result a{color:#c5b8ff}
+.chat-shell{border:1px solid var(--border);border-radius:17px;overflow:hidden;background:#0d1018}
+.chat-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px;border-bottom:1px solid var(--border)}
+.chat-head small{display:block;color:var(--muted);font-size:11px}
+.messages{height:min(52vh,520px);min-height:280px;overflow:auto;padding:17px;display:flex;flex-direction:column;gap:14px}
+.message{display:flex;gap:9px;align-items:flex-start;max-width:95%}
+.message.user{align-self:flex-end;flex-direction:row-reverse}
+.avatar{flex-shrink:0;width:30px;height:30px;border-radius:10px;background:#29233f;display:grid;place-items:center}
+.message.user .avatar{background:#203d34}
+.bubble{white-space:pre-wrap;overflow-wrap:anywhere;background:#171b28;border:1px solid #292e40;border-radius:4px 13px 13px 13px;padding:11px 13px}
+.message.user .bubble{background:#292440;border-radius:13px 4px 13px 13px}
+.bubble p{margin:0 0 9px}
+.bubble p:last-child{margin-bottom:0}
+.compose{padding:12px;border-top:1px solid var(--border)}
+.compose textarea{width:100%;min-height:70px;max-height:190px;resize:vertical;border:1px solid #303548;border-radius:11px;background:#11141e;color:white;padding:12px}
+.compose-bottom{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:9px}
+.compose-bottom small{color:var(--muted);font-size:10px}
+.step{display:flex;gap:12px;margin:14px 0}
+.step-number{width:29px;height:29px;flex-shrink:0;border:1px solid #514775;color:#d4caff;border-radius:9px;display:grid;place-items:center}
+.step h3{margin:1px 0 4px;font-size:13px}
+.step p{margin:0;color:var(--muted);font-size:12px}
+.quiz-option{display:block;width:100%;text-align:left;padding:11px;margin:8px 0;border:1px solid var(--border);border-radius:10px;background:#11141e;color:white}
+.quiz-option.correct{border-color:#4aa982;background:#153025}
+.quiz-option.wrong{border-color:#b35d70;background:#321a23}
+.footer{border-top:1px solid var(--border);padding-top:16px;margin-top:30px;color:#7f879c;font-size:11px}
+.hidden{display:none!important}
+.mobile-nav{display:none}
+@media(max-width:1000px){
+ .sidebar{width:215px}.main{margin-left:215px}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.content{padding:22px}
+}
+@media(max-width:700px){
+ .sidebar{display:none}.main{margin-left:0;padding-bottom:70px}
+ .topbar{height:58px;padding:0 13px}.content{padding:17px 13px}
+ .grid,.grid.two{grid-template-columns:1fr}.hero{padding:22px 16px}
+ .local-tag{display:none}.messages{height:54vh;padding:12px}
+ .mobile-nav{position:fixed;inset:auto 0 0;z-index:20;display:flex;padding:6px 3px calc(6px + env(safe-area-inset-bottom));background:#0c0e16f7;border-top:1px solid var(--border)}
+ .mobile-nav button{flex:1;background:none;border:0;border-radius:8px;color:#9da4b8;font-size:10px;padding:6px 1px}
+ .mobile-nav button span{display:block;font-size:17px}
+ .mobile-nav button.active{background:#27223e;color:#ded6ff}
+ h1{font-size:29px}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+  <div class="brand">
+    <div class="logo">N</div>
+    <div><div class="brand-name">NEXA</div><div class="brand-sub">KNOWLEDGE WORKSPACE</div></div>
+  </div>
+  <div class="nav-label">WORKSPACE</div>
+  <button class="nav-btn active" data-page="home"><span class="nav-icon">⌂</span>Home</button>
+  <button class="nav-btn" data-page="assistant"><span class="nav-icon">✳</span>Assistant</button>
+  <button class="nav-btn" data-page="knowledge"><span class="nav-icon">⌕</span>Knowledge Search</button>
+  <button class="nav-btn" data-page="study"><span class="nav-icon">▤</span>Study Explorer</button>
+  <div class="nav-label">CREATE & BUILD</div>
+  <button class="nav-btn" data-page="coding"><span class="nav-icon">⌘</span>Coding Reference</button>
+  <button class="nav-btn" data-page="research"><span class="nav-icon">◉</span>Research Starter</button>
+  <button class="nav-btn" data-page="writing"><span class="nav-icon">✎</span>Writing Studio</button>
+  <button class="nav-btn" data-page="ideas"><span class="nav-icon">✧</span>Idea Explorer</button>
+  <button class="nav-btn" data-page="planner"><span class="nav-icon">☷</span>Build Your Plan</button>
+  <div class="nav-label">ACCOUNT</div>
+  <button class="nav-btn" data-page="premium"><span class="nav-icon">◇</span>Plans & Premium</button>
+  <div class="sidebar-bottom">
+    <div class="status"><strong><span class="dot"></span>Browser engine ready</strong><p>No API key or model download. Online reference search needs internet.</p></div>
+    <p class="muted" style="font-size:10px;padding:8px">NEXA · Everyday Knowledge Workspace</p>
+  </div>
+</aside>
+
+<main class="main">
+<header class="topbar">
+  <div id="pageLabel">Home / Overview</div>
+  <div class="top-right"><span class="local-tag">LOCAL ENGINE</span><button class="secondary" id="headerAsk">Ask NEXA ↗</button></div>
+</header>
+
+<div class="content">
+<section class="page active" id="page-home">
+  <div class="hero">
+    <div class="eyebrow">YOUR EVERYDAY KNOWLEDGE WORKSPACE</div>
+    <h1>Turn questions into<br>your next move.</h1>
+    <p>Explore topics, learn concepts, build code examples, plan projects and turn ideas into practical steps—all from one lightweight workspace.</p>
+    <form class="searchbar" id="homeForm">
+      <input id="homeInput" placeholder="Ask something, e.g. explain Python loops..." aria-label="Ask NEXA">
+      <button class="primary" type="submit">Ask NEXA ↗</button>
+    </form>
+    <div class="chips">
+      <button class="chip" data-prompt="Explain Python loops">Explain a concept</button>
+      <button class="chip" data-prompt="Give me a Python calculator code">Write code</button>
+      <button class="chip" data-prompt="Make a 7 day Python learning plan">Build a learning plan</button>
+      <button class="chip" data-prompt="Give me a business idea">Explore an idea</button>
+    </div>
+  </div>
+  <div class="section-head"><h2>Your workspace</h2><span class="muted">Choose a tool</span></div>
+  <div class="grid">
+    <article class="card"><div class="card-icon">✳</div><h3>Assistant</h3><p>Ask supported questions and get structured answers.</p><button class="card-link" data-go="assistant">Open assistant →</button></article>
+    <article class="card"><div class="card-icon">⌕</div><h3>Knowledge Search</h3><p>Search public reference articles.</p><button class="card-link" data-go="knowledge">Explore knowledge →</button></article>
+    <article class="card"><div class="card-icon">⌘</div><h3>Coding Reference</h3><p>Use beginner code templates with explanations.</p><button class="card-link" data-go="coding">Open coding lab →</button></article>
+    <article class="card"><div class="card-icon">▤</div><h3>Study Explorer</h3><p>Learn selected topics and take quizzes.</p><button class="card-link" data-go="study">Start learning →</button></article>
+    <article class="card"><div class="card-icon">☷</div><h3>Build Your Plan</h3><p>Turn a goal into actionable steps.</p><button class="card-link" data-go="planner">Build a plan →</button></article>
+    <article class="card"><div class="card-icon">✧</div><h3>Idea Explorer</h3><p>Explore problems, customers and product tests.</p><button class="card-link" data-go="ideas">Explore ideas →</button></article>
+  </div>
+  <div class="section-head"><h2>How NEXA works</h2></div>
+  <div class="grid two">
+    <div class="card"><span class="tag">01 · UNDERSTAND</span><h3>Recognises supported tasks</h3><p>Local rules identify common coding, study, planning and writing requests.</p></div>
+    <div class="card"><span class="tag">02 · BUILD</span><h3>Creates a useful starting point</h3><p>Templates, explanations and checklists help you get started.</p></div>
+  </div>
+  <p class="notice">This is a rule-based browser application, not a generative AI model. It cannot answer every possible question.</p>
+</section>
+
+<section class="page" id="page-assistant">
+  <div class="eyebrow">NEXA ASSISTANT</div><h1>What are we working on?</h1>
+  <p class="muted">English aur Hinglish mein common tasks try karo.</p>
+  <div class="chips">
+    <button class="chip" data-prompt="Explain Python functions">Python functions</button>
+    <button class="chip" data-prompt="Give me a Python calculator code">Calculator code</button>
+    <button class="chip" data-prompt="Make a 7 day study plan">Study plan</button>
+    <button class="chip" data-prompt="Help me validate a business idea">Business idea</button>
+  </div>
+  <div class="chat-shell" style="margin-top:16px">
+    <div class="chat-head"><div><strong>✳ NEXA / Browser Engine</strong><small>Rule-based assistance · no AI API</small></div><button class="small" id="clearChat">Clear chat</button></div>
+    <div class="messages" id="messages" aria-live="polite"></div>
+    <div class="compose">
+      <textarea id="chatInput" placeholder="Type your question... Enter to send, Shift+Enter for a new line" aria-label="Message NEXA"></textarea>
+      <div class="compose-bottom"><small>Do not share passwords or private information.</small><button class="primary" id="sendChat">Send ↗</button></div>
+    </div>
+  </div>
+</section>
+
+<section class="page" id="page-knowledge">
+  <div class="eyebrow">PUBLIC REFERENCES</div><h1>Knowledge Search</h1><p class="muted">Search public encyclopedia articles. Internet required.</p>
+  <div class="panel"><form id="knowledgeForm"><div class="field"><label for="knowledgeInput">Topic</label><input id="knowledgeInput" required placeholder="e.g. artificial intelligence"></div><button class="primary">Search references ↗</button></form></div>
+  <div class="results" id="knowledgeResults"></div>
+</section>
+
+<section class="page" id="page-study">
+  <div class="eyebrow">STUDY EXPLORER</div><h1>Learn it. Test it.</h1><p class="muted">Choose a lesson and answer a practice question.</p>
+  <div class="panel"><div class="field"><label for="studyTopic">Topic</label><select id="studyTopic"><option value="python">Python basics</option><option value="loops">Loops</option><option value="functions">Functions</option><option value="html">HTML basics</option><option value="ai">Artificial intelligence</option><option value="internet">How the internet works</option><option value="variables">Variables</option></select></div><button class="primary" id="loadStudy">Open lesson</button></div>
+  <div class="output hidden" id="studyOutput"></div><div class="panel hidden" id="quizOutput" style="margin-top:14px"></div>
+</section>
+
+<section class="page" id="page-coding">
+  <div class="eyebrow">CODING REFERENCE LAB</div><h1>Start with working examples.</h1><p class="muted">Select a supported template, review it and copy it.</p>
+  <div class="panel">
+    <div class="field"><label for="codeLanguage">Language</label><select id="codeLanguage"><option value="python">Python</option><option value="html">HTML + CSS</option><option value="javascript">JavaScript</option></select></div>
+    <div class="field"><label for="codeTask">Example</label><select id="codeTask"></select></div>
+    <div class="field"><label for="codeName">Project name (optional)</label><input id="codeName" placeholder="e.g. Student System"></div>
+    <button class="primary" id="generateCode">Generate example ↗</button>
+  </div>
+  <div class="output hidden" id="codeOutput"></div>
+  <p class="notice">Templates are examples, not arbitrary AI-generated code. NEXA does not execute code on your device.</p>
+</section>
+
+<section class="page" id="page-research">
+  <div class="eyebrow">RESEARCH STARTER</div><h1>Turn a topic into a research plan.</h1>
+  <div class="panel">
+    <div class="field"><label for="researchTopic">Research topic</label><input id="researchTopic" placeholder="e.g. How AI helps students"></div>
+    <div class="field"><label for="researchPurpose">Purpose</label><select id="researchPurpose"><option>School project</option><option>Beginner learning</option><option>Product research</option><option>Science exploration</option></select></div>
+    <button class="primary" id="makeResearch">Create research starter ↗</button>
+  </div>
+  <div class="output hidden" id="researchOutput"></div>
+</section>
+
+<section class="page" id="page-writing">
+  <div class="eyebrow">WRITING STUDIO</div><h1>Get your first draft structure.</h1>
+  <div class="panel">
+    <div class="field"><label for="writingType">Writing type</label><select id="writingType"><option value="essay">Essay</option><option value="email">Email</option><option value="blog">Blog post</option><option value="presentation">Presentation</option><option value="project">Project report</option><option value="social">Social post</option></select></div>
+    <div class="field"><label for="writingTopic">Topic or purpose</label><input id="writingTopic" placeholder="e.g. Benefits of learning coding"></div>
+    <div class="field"><label for="writingTone">Tone</label><select id="writingTone"><option>Simple and clear</option><option>Professional</option><option>Friendly</option><option>Persuasive</option></select></div>
+    <button class="primary" id="makeWriting">Create outline ↗</button>
+  </div>
+  <div class="output hidden" id="writingOutput"></div>
+</section>
+
+<section class="page" id="page-ideas">
+  <div class="eyebrow">IDEA EXPLORER</div><h1>Start with a real problem.</h1>
+  <div class="panel">
+    <div class="field"><label for="ideaArea">Area</label><select id="ideaArea"><option value="everyday life">Everyday life</option><option value="education">Education</option><option value="small businesses">Small businesses</option><option value="developers">Developers and technology</option><option value="community">Local communities</option></select></div>
+    <div class="field"><label for="ideaSkills">Your skills/resources (optional)</label><input id="ideaSkills" placeholder="e.g. beginner Python, free website"></div>
+    <button class="primary" id="makeIdea">Explore opportunity ↗</button>
+  </div>
+  <div class="output hidden" id="ideaOutput"></div>
+</section>
+
+<section class="page" id="page-planner">
+  <div class="eyebrow">PROJECT PLANNER</div><h1>Make your next move concrete.</h1>
+  <div class="panel">
+    <div class="field"><label for="planGoal">Your goal</label><input id="planGoal" placeholder="e.g. Build a portfolio website"></div>
+    <div class="row">
+      <div class="field"><label for="planDuration">Duration</label><select id="planDuration"><option value="3">3 days</option><option value="7" selected>7 days</option><option value="14">14 days</option><option value="30">30 days</option></select></div>
+      <div class="field"><label for="planLevel">Current level</label><select id="planLevel"><option>Beginner</option><option>Intermediate</option><option>Advanced</option></select></div>
+    </div>
+    <div class="field"><label for="planHours">Daily time</label><select id="planHours"><option value="30">30 minutes</option><option value="60" selected>1 hour</option><option value="120">2 hours</option></select></div>
+    <button class="primary" id="makePlan">Build my plan ↗</button>
+  </div>
+  <div class="output hidden" id="planOutput"></div>
+</section>
+
+<section class="page" id="page-premium">
+  <div class="eyebrow">PLANS & TRANSPARENCY</div><h1>Useful tools, clearly explained.</h1><p class="muted">This is a free browser prototype. No payment processor is connected.</p>
+  <div class="grid two">
+    <div class="card"><span class="tag">AVAILABLE NOW</span><h2>Free prototype</h2><p>Local assistant rules, code templates, lessons, writing outlines and planning.</p><button class="secondary" data-go="assistant">Open workspace</button></div>
+    <div class="card"><span class="tag">FUTURE CONCEPT</span><h2>Premium</h2><p>Possible future features include saved projects and more templates. These features are not being sold yet.</p><button class="secondary" id="premiumInfo">View status</button></div>
+  </div>
+  <div class="output hidden" id="premiumOutput"><strong>No payment is being collected.</strong><p>There is no checkout, subscription or paid feature connected to this prototype.</p></div>
+</section>
+
+<div class="footer">NEXA is an independent browser prototype. Online reference search requires internet. Always verify important information.</div>
+</div>
+</main>
+</div>
+
+<nav class="mobile-nav" aria-label="Mobile navigation">
+  <button class="active" data-page="home"><span>⌂</span>Home</button>
+  <button data-page="assistant"><span>✳</span>Assistant</button>
+  <button data-page="knowledge"><span>⌕</span>Search</button>
+  <button data-page="coding"><span>⌘</span>Code</button>
+  <button data-page="planner"><span>☷</span>Plan</button>
+</nav>
+
+<script>
+"use strict";
+
+/* NEXA: central navigation and browser-side tools */
+
+const $ = (s,root=document) => root.querySelector(s);
+const $$ = (s,root=document) => [...root.querySelectorAll(s)];
+
+const pageNames={
+ home:"Home / Overview",assistant:"Assistant / Workspace",
+ knowledge:"Knowledge / Search",study:"Learning / Study Explorer",
+ coding:"Build / Coding Reference",research:"Explore / Research Starter",
+ writing:"Create / Writing Studio",ideas:"Explore / Idea Explorer",
+ planner:"Plan / Project Planner",premium:"Plans / Premium"
+};
+
+function goToPage(name){
+ if(!pageNames[name]) return;
+ $$(".page").forEach(page=>page.classList.remove("active"));
+ const target=$("#page-"+name);
+ if(target) target.classList.add("active");
+ $$("[data-page]").forEach(btn=>btn.classList.toggle("active",btn.dataset.page===name));
+ $("#pageLabel").textContent=pageNames[name];
+ window.scrollTo({top:0,behavior:"auto"});
+}
+
+/* One navigation handler for sidebar and mobile buttons */
+document.addEventListener("click",event=>{
+ const pageButton=event.target.closest("[data-page]");
+ if(pageButton){goToPage(pageButton.dataset.page);return;}
+ const goButton=event.target.closest("[data-go]");
+ if(goButton){goToPage(goButton.dataset.go);return;}
+ const promptButton=event.target.closest("[data-prompt]");
+ if(promptButton){
+  $("#chatInput").value=promptButton.dataset.prompt;
+  goToPage("assistant");
+  $("#chatInput").focus();
+  return;
+ }
+ const copy=event.target.closest("[data-copy]");
+ if(copy) copyText(copy.dataset.copy);
+});
+
+$("#headerAsk").addEventListener("click",()=>goToPage("assistant"));
+
+function escapeHTML(value){
+ return String(value).replace(/[&<>"']/g,c=>({
+  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+ }[c]));
+}
+function clean(value,max=500){return String(value||"").trim().slice(0,max);}
+function showOutput(id,html){const el=$("#"+id);el.innerHTML=html;el.classList.remove("hidden");}
+function copyText(text){
+ if(navigator.clipboard&&window.isSecureContext){
+  navigator.clipboard.writeText(text).then(()=>notify("Copied.")).catch(()=>fallbackCopy(text));
+ }else fallbackCopy(text);
+}
+function fallbackCopy(text){
+ const area=document.createElement("textarea");
+ area.value=text;area.style.position="fixed";area.style.opacity="0";
+ document.body.appendChild(area);area.select();
+ let ok=false;
+ try{ok=document.execCommand("copy");}catch(e){}
+ area.remove();
+ notify(ok?"Copied.":"Copy unavailable. Select the text and copy manually.");
+}
+let toastTimer;
+function notify(message){
+ let toast=$("#nexaToast");
+ if(!toast){
+  toast=document.createElement("div");toast.id="nexaToast";toast.setAttribute("role","status");
+  Object.assign(toast.style,{position:"fixed",bottom:"82px",left:"50%",transform:"translateX(-50%)",background:"#29233f",color:"#fff",padding:"10px 15px",border:"1px solid #514775",borderRadius:"11px",zIndex:"99",maxWidth:"90%",fontSize:"12px"});
+  document.body.appendChild(toast);
+ }
+ toast.textContent=message;toast.style.display="block";
+ clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.style.display="none",2300);
+}
+function copyButton(text,label="Copy"){
+ return '<button class="small" data-copy="'+escapeHTML(text)+'">'+escapeHTML(label)+'</button>';
+}
+
+/* Home search */
+$("#homeForm").addEventListener("submit",event=>{
+ event.preventDefault();
+ const value=clean($("#homeInput").value,800);
+ if(!value)return;
+ $("#chatInput").value=value;
+ goToPage("assistant");
+ sendMessage();
+});
+
+/* Assistant conversation */
+let conversation=[];
+try{
+ const saved=sessionStorage.getItem("nexaChat");
+ if(saved){
+  const data=JSON.parse(saved);
+  if(Array.isArray(data))conversation=data.filter(m=>m&&["user","assistant"].includes(m.role)&&typeof m.text==="string").slice(-30);
+ }
+}catch(e){conversation=[];}
+
+function renderMessage(role,text){
+ const wrap=document.createElement("div");
+ wrap.className="message "+(role==="user"?"user":"");
+ const avatar=document.createElement("div");avatar.className="avatar";
+ avatar.textContent=role==="user"?"Y":"N";
+ const bubble=document.createElement("div");bubble.className="bubble";
+ /* textContent ensures code and user messages cannot become HTML */
+ bubble.textContent=text;
+ wrap.append(avatar,bubble);
+ $("#messages").appendChild(wrap);
+}
+function redrawChat(){
+ $("#messages").replaceChildren();
+ if(!conversation.length){
+  renderMessage("assistant","Hey! Welcome to NEXA.\n\nMain supported coding examples, selected explanations, study quizzes, writing outlines, research plans aur project roadmaps mein help kar sakta hoon.\n\nApna task likho.");
+ }else conversation.forEach(m=>renderMessage(m.role,m.text));
+ $("#messages").scrollTop=$("#messages").scrollHeight;
+}
+function addMessage(role,text){
+ conversation.push({role,text});
+ conversation=conversation.slice(-30);
+ try{sessionStorage.setItem("nexaChat",JSON.stringify(conversation));}catch(e){}
+ redrawChat();
+}
+$("#clearChat").addEventListener("click",()=>{
+ conversation=[];
+ try{sessionStorage.removeItem("nexaChat");}catch(e){}
+ redrawChat();notify("Chat cleared.");
+});
+$("#sendChat").addEventListener("click",sendMessage);
+$("#chatInput").addEventListener("keydown",event=>{
+ if(event.key==="Enter"&&!event.shiftKey){event.preventDefault();sendMessage();}
+});
+function sendMessage(){
+ const input=$("#chatInput");
+ const q=clean(input.value,1000);
+ if(!q)return;
+ input.value="";
+ addMessage("user",q);
+ const answer=respond(q);
+ addMessage("assistant",answer);
+}
+function has(text,words){return words.some(word=>text.includes(word));}
+
+function respond(raw){
+ const q=raw.toLowerCase().trim();
+
+ if(/^(hi|hello|hey|hii+|hlo|namaste|नमस्ते)[!. ]*$/.test(q))
+  return "Hey! Batao kya karna hai?\n\n• Explain a concept\n• Write a supported code example\n• Create a study plan\n• Make a writing outline\n• Build a research starter\n• Explore a product idea\n\nMain browser rules aur templates use karta hoon, generative AI model nahi.";
+
+ if(has(q,["what can you do","help me","kya kar sakte","help karo","tum kya kar"])){
+  return "NEXA ke tools:\n\n• Coding Reference: Python, HTML/CSS aur JavaScript examples\n• Study Explorer: selected lessons and quizzes\n• Planner: goal-based schedules\n• Writing Studio: essay, email, blog aur presentation outlines\n• Research Starter: research questions and source-checking plans\n• Idea Explorer: customer problems and validation steps\n\nKisi tool ko sidebar se bhi open kar sakte ho.";
+ }
+
+ if(has(q,["debug","error fix","fix my code","bug fix","error aa","code error","not working","doesn't work","doesnt work"])){
+  return "Exact bug diagnose karne ke liye mujhe code aur error message chahiye.\n\n1. Error ka exact text copy karo.\n2. Language aur tool ka naam batao.\n3. Sirf relevant code share karo.\n4. Passwords, API keys aur private information remove kar do.\n\nAbhi error dekhe bina exact fix claim karna sahi nahi hoga.";
+ }
+
+ if(has(q,["calculator code","python code","write code","generate code","html code","javascript code","python program","code bana","code likh","coding example","program bana","program likh"])){
+  goToPage("coding");
+  const lang=q.includes("html")?"html":(q.includes("javascript")||/\bjs\b/.test(q))?"javascript":"python";
+  $("#codeLanguage").value=lang;populateCodeTasks();
+  let task="hello";
+  if(has(q,["calculator","calc"]))task="calculator";
+  else if(has(q,["loop"]))task="loops";
+  else if(has(q,["function"]))task="functions";
+  else if(has(q,["list","dictionary","dict"]))task="lists";
+  else if(has(q,["class","object","oop"]))task="classes";
+  else if(has(q,["button","click"]))task="button";
+  else if(has(q,["website","web page","webpage","starter"]))task="starter";
+  else if(has(q,["dom","interaction"]))task="dom";
+  $("#codeTask").value=task;
+  generateCode();
+  return "Coding Reference khol diya hai aur matching supported example select kiya hai. Neeche code aur instructions dekho.\n\nNote: yeh predefined templates hain, arbitrary AI code generation nahi.";
+ }
+
+ if(has(q,["quiz","test me","practice question","mcq","test lo","question pooch"])){
+  goToPage("study");
+  if(q.includes("html"))$("#studyTopic").value="html";
+  else if(q.includes("function"))$("#studyTopic").value="functions";
+  else if(q.includes("loop"))$("#studyTopic").value="loops";
+  else if(q.includes("ai"))$("#studyTopic").value="ai";
+  else if(q.includes("internet"))$("#studyTopic").value="internet";
+  else if(q.includes("variable"))$("#studyTopic").value="variables";
+  else $("#studyTopic").value="python";
+  loadStudy();
+  return "Study Explorer open kar diya hai. Lesson padho aur quiz ka answer choose karo.";
+ }
+
+ if(has(q,["study plan","learning plan","roadmap","learn python","learn coding","seekhna","sikhna","plan bana","project plan"])){
+  goToPage("planner");$("#planGoal").value=raw;makePlan();
+  return "Tumhare goal ke liye starter roadmap bana diya hai. Planner mein duration aur daily time customize kar sakte ho.";
+ }
+
+ if(has(q,["business idea","business model","earning idea","earn money","paise kam","online business","startup idea","product idea","customer"])){
+  goToPage("ideas");
+  if(has(q,["school","student","education","study"]))$("#ideaArea").value="education";
+  else if(has(q,["shop","small business"]))$("#ideaArea").value="small businesses";
+  else if(has(q,["community","local"]))$("#ideaArea").value="community";
+  $("#ideaSkills").value=raw;makeIdea();
+  return "Idea Explorer mein product hypothesis aur customer-validation steps banaye hain. Income guaranteed nahi hai; pehle real users se demand validate karna.";
+ }
+
+ if(has(q,["essay","email draft","write an email","blog post","presentation","write about","paragraph","letter likh","email likh","article likh","writing outline"])){
+  goToPage("writing");
+  if(has(q,["email","letter"]))$("#writingType").value="email";
+  else if(has(q,["blog","article"]))$("#writingType").value="blog";
+  else if(has(q,["presentation","slides"]))$("#writingType").value="presentation";
+  else if(has(q,["report","project"]))$("#writingType").value="project";
+  else if(has(q,["social","caption","post"]))$("#writingType").value="social";
+  else $("#writingType").value="essay";
+  $("#writingTopic").value=raw;makeWriting();
+  return "Writing Studio mein outline create kiya hai. Facts aur personal details add karke ise apne purpose ke liye complete karo.";
+ }
+
+ if(has(q,["research","science project","investigate","research question"])){
+  goToPage("research");$("#researchTopic").value=raw;makeResearch();
+  return "Research Starter mein questions aur source-checking plan bana diya hai. Final claims ko reliable sources se verify karna.";
+ }
+
+ if(has(q,["explain","meaning","what is","what are","how does","how do","samjha","samjhao","kya hota","kaise kaam","define","definition"])){
+  const explanation=explainKnown(q);
+  if(explanation)return explanation;
+  return "Mere built-in lessons mein is exact topic ka answer nahi mila.\n\nTum Knowledge Search se public reference dekh sakte ho, ya question ko specific bana sakte ho.\n\nExample: “Explain Python functions with an example.”";
+ }
+
+ if(has(q,["search","find information","information about","look up","wikipedia","jaankari","jankari","ke baare mein"])){
+  goToPage("knowledge");$("#knowledgeInput").value=raw;
+  return "Knowledge Search open hai. Search button dabao; public reference results ke liye internet connection chahiye.";
+ }
+
+ if(has(q,["thank you","thanks","shukriya","dhanyavaad"]))return "You're welcome! Ab next task choose karo—coding, study, writing, research ya planning.";
+
+ if(has(q,["who are you","tum kaun","what is nexa","nexa kya"])){
+  return "Main NEXA hoon, ek browser-based knowledge workspace. Mere paas selected explanations, local rules aur templates hain. Main generative AI model nahi hoon. Online reference search karne par query Wikipedia ko bheji jaati hai.";
+ }
+
+ return "Main is request ko supported task mein confidently classify nahi kar paaya.\n\nTry:\n• Explain Python functions\n• Give me a Python calculator code\n• Make a 7 day coding plan\n• Create an essay outline about space\n• Research how AI helps students\n• Suggest a product idea for small shops\n\nYa sidebar se relevant tool khol lo.";
+}
+
+function explainKnown(q){
+ const items=[
+  {keys:["python function","functions in python","function in python","functions"],title:"Python functions",body:"A function reusable code ka block hota hai. Function ko naam dete hain aur zarurat par call karte hain.",code:'def greet(name):\n    return f"Hello, {name}!"\n\nprint(greet("Aman"))',extra:"def function define karta hai, name parameter hai, aur return result deta hai."},
+  {keys:["python loop","loops in python","for loop","while loop","loops"],title:"Loops",body:"Loop instructions ko repeat karta hai. for loop sequence par kaam karta hai; while loop condition true rehne tak chalta hai.",code:"for number in range(1, 4):\n    print(number)",extra:"range(1, 4) numbers 1, 2 aur 3 deta hai."},
+  {keys:["python variable","variables in python","variable"],title:"Variables",body:"Variable ek naam hai jisse program mein value ko refer karte hain.",code:'name = "Aman"\nage = 14\nprint(name)\nprint(age)',extra:"Python mein string text rakhti hai aur integer whole number rakhta hai."},
+  {keys:["artificial intelligence","what is ai","ai kya","ai meaning"],title:"Artificial intelligence",body:"AI ek broad field hai jisme systems classification, prediction, language processing aur generation jaise tasks karte hain.",code:"Input data → Rules or model → Output → Evaluation",extra:"Har automated program generative AI nahi hota. Rule-based programs fixed instructions follow kar sakte hain."},
+  {keys:["html","what is html","html kya"],title:"HTML basics",body:"HTML web page ka structure define karta hai. Headings, paragraphs, links aur buttons HTML elements hote hain.",code:'<!doctype html>\n<html lang="en">\n<body>\n  <h1>Hello</h1>\n  <p>My webpage.</p>\n</body>\n</html>',extra:"HTML structure, CSS styling aur JavaScript interactions ke liye use hota hai."},
+  {keys:["internet","how internet works","internet kaise"],title:"How the internet works",body:"Browser network ke through server ko request bhejta hai aur server response deta hai.",code:"Browser → Request → Server → Response",extra:"DNS domain name ko IP address se resolve karne mein help karta hai."},
+  {keys:["gravity","gravitation"],title:"Gravity",body:"Gravity mass wali objects ke beech attraction ka natural interaction hai. Earth ki gravity objects ko Earth ki taraf accelerate karti hai.",code:"Near Earth's surface:\nW = m × g\ng ≈ 9.8 m/s²",extra:"Mass kilogram mein aur weight force ke roop mein newtons mein measure hota hai."},
+  {keys:["python","what is python","python kya"],title:"Python",body:"Python ek general-purpose programming language hai jo automation, data analysis, education aur software development mein use hoti hai.",code:'print("Hello, world!")',extra:"Python code run karne ke liye Python interpreter chahiye."}
+ ];
+ for(const item of items){
+  if(item.keys.some(k=>q.includes(k)))return item.title+"\n\n"+item.body+"\n\nExample:\n"+item.code+"\n\n"+item.extra;
+ }
+ return "";
+}
+
+/* Public Wikipedia search */
+$("#knowledgeForm").addEventListener("submit",async event=>{
+ event.preventDefault();
+ const query=clean($("#knowledgeInput").value,180);
+ if(!query)return;
+ const output=$("#knowledgeResults");
+ output.replaceChildren();
+ const loading=document.createElement("div");loading.className="result";loading.textContent="Searching public references…";output.appendChild(loading);
+ try{
+  const url="https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch="+encodeURIComponent(query)+"&gsrnamespace=0&gsrlimit=7&prop=extracts&exintro=1&explaintext=1&exsentences=3&format=json&origin=*";
+  const response=await fetch(url);
+  if(!response.ok)throw new Error("Search unavailable");
+  const data=await response.json();
+  const pages=Object.values(data.query?.pages||{}).sort((a,b)=>(a.index||0)-(b.index||0));
+  output.replaceChildren();
+  if(!pages.length){output.textContent="No results found. Try another search phrase.";return;}
+  pages.forEach(page=>{
+   const article=document.createElement("article");article.className="result";
+   const heading=document.createElement("h3");heading.textContent=page.title;
+   const summary=document.createElement("p");summary.textContent=page.extract||"Open the article for more information.";
+   const link=document.createElement("a");link.href="https://en.wikipedia.org/?curid="+encodeURIComponent(page.pageid);link.target="_blank";link.rel="noopener noreferrer";link.textContent="Read reference ↗";
+   article.append(heading,summary,link);output.appendChild(article);
+  });
+ }catch(error){
+  output.replaceChildren();
+  const article=document.createElement("article");article.className="result";
+  const heading=document.createElement("h3");heading.textContent="Search unavailable";
+  const summary=document.createElement("p");summary.textContent="Check your internet connection and try again. Your browser or the reference service may be blocking the request.";
+  const link=document.createElement("a");link.href="https://en.wikipedia.org/";link.target="_blank";link.rel="noopener noreferrer";link.textContent="Open Wikipedia directly ↗";
+  article.append(heading,summary,link);output.appendChild(article);
+ }
+});
+
+/* Study lessons and quiz */
+const lessons={
+ python:{title:"Python basics",body:"Python is a programming language. print() displays output, and variables refer to values.",code:'name = "Aman"\nprint("Hello", name)',question:"Which function displays output?",options:["input()","print()","range()","type()"],answer:1,explain:"print() displays output."},
+ loops:{title:"Loops",body:"Loops repeat instructions. range(1, 4) produces 1, 2 and 3.",code:"for i in range(1, 4):\n    print(i)",question:"How many times does this loop run?",options:["2","3","4","Forever"],answer:1,explain:"The sequence contains three values: 1, 2 and 3."},
+ functions:{title:"Functions",body:"Functions are reusable blocks of code. Parameters receive values and return sends a result to the caller.",code:"def double(n):\n    return n * 2\n\nprint(double(4))",question:"What does double(4) return?",options:["4","6","8","16"],answer:2,explain:"4 multiplied by 2 is 8."},
+ html:{title:"HTML basics",body:"HTML describes page structure. Headings use h1–h6, paragraphs use p, and links use a.",code:"<h1>Welcome</h1>\n<p>Hello.</p>",question:"Which element represents a paragraph?",options:["<h1>","<p>","<link>","<bodytext>"],answer:1,explain:"The p element represents a paragraph."},
+ ai:{title:"Artificial intelligence",body:"AI systems can perform tasks such as classification, prediction, language processing and generation.",code:"Input → System → Output → Evaluation",question:"Does every rule-based program use generative AI?",options:["Yes","No","Only on phones","Only with HTML"],answer:1,explain:"Rule-based software can work without a generative AI model."},
+ internet:{title:"The internet",body:"Browsers send requests over networks. Servers respond with resources, and the browser renders pages.",code:"Browser → Request → Server → Response",question:"What does DNS help resolve?",options:["Domain names to IP addresses","Passwords","HTML into Python","Screen size"],answer:0,explain:"DNS helps resolve domain names to IP addresses."},
+ variables:{title:"Variables",body:"A variable is a name that refers to a value. Python assigns a value using the = operator.",code:"score = 10\nscore = score + 5\nprint(score)",question:"What is printed?",options:["10","5","15","score"],answer:2,explain:"10 + 5 produces 15."}
+};
+function loadStudy(){
+ const lesson=lessons[$("#studyTopic").value];if(!lesson)return;
+ showOutput("studyOutput","<h2>"+escapeHTML(lesson.title)+"</h2><p>"+escapeHTML(lesson.body)+"</p><pre>"+escapeHTML(lesson.code)+"</pre>"+copyButton(lesson.code,"Copy example")+"<p class=\"notice\">Read the explanation, then answer the quiz.</p>");
+ const quiz=$("#quizOutput");quiz.classList.remove("hidden");quiz.replaceChildren();
+ const title=document.createElement("h3");title.textContent="Quick quiz";
+ const question=document.createElement("p");question.textContent=lesson.question;
+ const options=document.createElement("div");
+ const feedback=document.createElement("p");feedback.className="notice";feedback.setAttribute("aria-live","polite");
+ const reset=document.createElement("button");reset.className="small";reset.textContent="Try again";reset.addEventListener("click",loadStudy);
+ quiz.append(title,question,options,feedback,reset);
+ lesson.options.forEach((label,index)=>{
+  const btn=document.createElement("button");btn.className="quiz-option";btn.textContent=label;
+  btn.addEventListener("click",()=>{
+   $$(".quiz-option",options).forEach(b=>b.disabled=true);
+   const correct=index===lesson.answer;
+   btn.classList.add(correct?"correct":"wrong");
+   if(!correct)$$(".quiz-option",options)[lesson.answer].classList.add("correct");
+   feedback.textContent=(correct?"Correct! ":"Not quite. ")+lesson.explain;
+  });
+  options.appendChild(btn);
+ });
+}
+$("#loadStudy").addEventListener("click",loadStudy);
+
+/* Coding templates */
+const templates={
+ python:{
+  hello:{title:"Hello World",code:'print("Hello, world!")',desc:"print() displays text in the console.",steps:["Save as hello.py.","Run with Python.","Expected output: Hello, world!"]},
+  calculator:{title:"Simple calculator",code:'print("Simple Calculator")\nnum1 = float(input("First number: "))\noperator = input("Operator (+, -, *, /): ").strip()\nnum2 = float(input("Second number: "))\n\nif operator == "+":\n    result = num1 + num2\nelif operator == "-":\n    result = num1 - num2\nelif operator == "*":\n    result = num1 * num2\nelif operator == "/":\n    if num2 == 0:\n        print("Cannot divide by zero.")\n        result = None\n    else:\n        result = num1 / num2\nelse:\n    print("Unsupported operator.")\n    result = None\n\nif result is not None:\n    print("Result:", result)',desc:"Uses input, numeric conversion and if/elif conditions.",steps:["Save as calculator.py.","Run with Python.","Enter two numbers and an operator."]},
+  loops:{title:"Loops",code:'for number in range(1, 6):\n    print(number)\n\ncount = 1\nwhile count <= 3:\n    print(count)\n    count += 1',desc:"for iterates over a sequence; while repeats while a condition is true.",steps:["Save as loops.py.","Run the program.","Notice range stops before its end value."]},
+  functions:{title:"Functions",code:'def add(a, b):\n    return a + b\n\ndef greet(name):\n    return f"Hello, {name}!"\n\nprint(add(4, 5))\nprint(greet("Aman"))',desc:"Functions reuse code and can return results.",steps:["Save as functions.py.","Run the program.","Change the arguments."]},
+  lists:{title:"Lists and dictionaries",code:'students = ["Aman", "Riya", "Kabir"]\nfor student in students:\n    print(student)\n\nprofile = {"name": "Aman", "level": "beginner"}\nprint(profile["name"])',desc:"Lists hold ordered items; dictionaries map keys to values.",steps:["Save as collections.py.","Run the program.","Try adding an item."]},
+  classes:{title:"Classes and objects",code:'class Student:\n    def __init__(self, name, grade):\n        self.name = name\n        self.grade = grade\n\n    def introduce(self):\n        return f"My name is {self.name}."\n\nstudent = Student("Aman", 9)\nprint(student.introduce())',desc:"A class defines a type of object. __init__ sets its initial attributes.",steps:["Save as student.py.","Run the program.","Create another Student object."]}
+ },
+ html:{
+  starter:{title:"Responsive website starter",code:'<!doctype html>\n<html lang="en">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n<title>My Website</title>\n<style>\nbody{margin:0;padding:30px;font-family:system-ui;background:#10131d;color:white}\nmain{max-width:700px;margin:auto;padding:24px;border:1px solid #34394b;border-radius:16px}\nbutton{padding:10px 15px;border:0;border-radius:8px;cursor:pointer}\n</style>\n</head>\n<body>\n<main>\n<h1>Welcome to my website</h1>\n<p>My first responsive web page.</p>\n<button id="helloButton">Click me</button>\n<p id="message"></p>\n</main>\n<script>\ndocument.querySelector("#helloButton").addEventListener("click", function(){\n document.querySelector("#message").textContent = "Hello! It works.";\n});\n</script>\n</body>\n</html>',desc:"A standalone page with CSS styling and a working JavaScript button.",steps:["Save as index.html.","Open it in a browser.","Click the button."]},
+  button:{title:"Interactive button",code:'<!doctype html>\n<html lang="en">\n<body>\n<p id="message">Click the button below.</p>\n<button id="myButton">Click me</button>\n<script>\ndocument.querySelector("#myButton").addEventListener("click", function(){\n document.querySelector("#message").textContent = "It works!";\n});\n</script>\n</body>\n</html>',desc:"A button click changes the paragraph text.",steps:["Save as button.html.","Open in a browser.","Click the button."]}
+ },
+ javascript:{
+  hello:{title:"Hello World",code:'console.log("Hello, world!");',desc:"console.log() writes a message to the console.",steps:["Save as hello.js.","Run in a JavaScript environment."]},
+  starter:{title:"Variables and functions",code:'const name = "Aman";\nlet score = 10;\n\nfunction addPoints(points) {\n  score += points;\n  return score;\n}\n\nconsole.log("Hello, " + name + "!");\nconsole.log(addPoints(5));',desc:"const bindings cannot be reassigned; let bindings can be reassigned.",steps:["Save as app.js.","Run in a browser console or compatible runtime.","Change the values."]},
+  calculator:{title:"Simple calculations",code:'const first = 12;\nconst second = 4;\nconsole.log("Add:", first + second);\nconsole.log("Subtract:", first - second);\nconsole.log("Multiply:", first * second);\nconsole.log("Divide:", first / second);',desc:"Arithmetic operators perform calculations.",steps:["Save as calculator.js.","Run it in JavaScript.","Change the numbers."]},
+  loops:{title:"Loops",code:'for (let i = 1; i <= 5; i++) {\n  console.log(i);\n}\nconst fruits = ["apple", "mango", "banana"];\nfor (const fruit of fruits) {\n  console.log(fruit);\n}',desc:"for loops can count or iterate through collection items.",steps:["Save as loops.js.","Run in JavaScript.","Add a fruit."]},
+  functions:{title:"Functions",code:'function greet(name) {\n  return "Hello, " + name + "!";\n}\nconsole.log(greet("Aman"));',desc:"Functions accept parameters and can return values.",steps:["Save as functions.js.","Run it.","Change the name."]},
+  lists:{title:"Arrays and objects",code:'const tasks = ["Study", "Practice", "Review"];\ntasks.forEach(task => console.log(task));\nconst profile = {name: "Aman", level: "beginner"};\nconsole.log(profile.name);',desc:"Arrays hold ordered items; objects group properties.",steps:["Save as data.js.","Run in JavaScript.","Add an item."]},
+  classes:{title:"Classes",code:'class Student {\n  constructor(name) {\n    this.name = name;\n  }\n  introduce() {\n    return "My name is " + this.name + ".";\n  }\n}\nconst student = new Student("Aman");\nconsole.log(student.introduce());',desc:"A class defines a pattern for creating objects.",steps:["Save as student.js.","Run it.","Create another Student."]},
+  dom:{title:"DOM interaction",code:'const button = document.querySelector("#myButton");\nconst output = document.querySelector("#output");\nbutton.addEventListener("click", () => {\n  output.textContent = "Button clicked!";\n});',desc:"This script expects elements with IDs myButton and output.",steps:["Add a matching button and output element to HTML.","Load the script after those elements or use defer.","Click the button."]}
+ }
+};
+const taskOptions={
+ python:[["hello","Hello World"],["calculator","Calculator"],["loops","Loops"],["functions","Functions"],["lists","Lists and dictionaries"],["classes","Classes and objects"]],
+ html:[["starter","Responsive website starter"],["button","Interactive button"]],
+ javascript:[["hello","Hello World"],["starter","Variables and functions"],["calculator","Calculations"],["loops","Loops"],["functions","Functions"],["lists","Arrays and objects"],["classes","Classes"],["dom","DOM interaction"]]
+};
+function populateCodeTasks(){
+ const language=$("#codeLanguage").value;
+ const select=$("#codeTask");select.replaceChildren();
+ taskOptions[language].forEach(item=>{
+  const option=document.createElement("option");option.value=item[0];option.textContent=item[1];select.appendChild(option);
+ });
+}
+$("#codeLanguage").addEventListener("change",populateCodeTasks);
+function generateCode(){
+ const language=$("#codeLanguage").value;
+ const item=templates[language]?.[$("#codeTask").value];
+ if(!item){notify("Template unavailable.");return;}
+ const project=clean($("#codeName").value,80);
+ const steps=item.steps.map((step,index)=>'<li>'+escapeHTML(step)+'</li>').join("");
+ showOutput("codeOutput",
+  '<div class="row"><h2>'+escapeHTML(item.title)+'</h2><span class="tag">'+escapeHTML(language.toUpperCase())+'</span></div>'+
+  '<p>'+escapeHTML(item.desc)+'</p>'+
+  (project?'<p><strong>Project name:</strong> '+escapeHTML(project)+'. This name does not automatically modify the code.</p>':"")+
+  '<pre id="generatedCode" class="code-block"></pre>'+
+  '<button class="small" id="copyGenerated">Copy code</button>'+
+  '<hr><h3>How to use it</h3><ol>'+steps+'</ol>'+
+  '<p class="notice">NEXA shows the template as text; it does not execute the code.</p>'
+ );
+ $("#generatedCode").textContent=item.code;
+ $("#copyGenerated").addEventListener("click",()=>copyText(item.code));
+}
+$("#generateCode").addEventListener("click",generateCode);
+populateCodeTasks();
+
+/* Research starter */
+function makeResearch(){
+ const topic=clean($("#researchTopic").value,180);
+ if(!topic){notify("Enter a research topic first.");return;}
+ const purpose=$("#researchPurpose").value;
+ const result="RESEARCH STARTER: "+topic+"\n\nPURPOSE\n"+purpose+
+ "\n\nMAIN QUESTION\nWhat should a beginner understand about "+topic+", and what reliable evidence can answer the question?"+
+ "\n\nSUB-QUESTIONS\n1. What does the topic mean?\n2. How does it work in practice?\n3. What are its benefits and applications?\n4. What are its limitations or risks?\n5. What evidence supports the main claims?"+
+ "\n\nMETHOD\n1. Write down what you already know.\n2. Find at least three relevant sources, prioritising official documentation, educational institutions, research papers or primary sources.\n3. Record the author, date, evidence and limitations.\n4. Compare sources.\n5. Separate verified facts from opinions."+
+ "\n\nREPORT STRUCTURE\n- Title and objective\n- Background and definitions\n- Evidence and findings\n- Limitations or opposing views\n- Conclusion\n- References"+
+ "\n\nNEXT ACTION\nChoose one question, find evidence and write a short answer with citations. This is a starter template, not a completed fact-checked report.";
+ showOutput("researchOutput",'<h2>Research outline</h2><pre id="researchText" class="code-block"></pre><button class="small" id="copyResearch">Copy outline</button>');
+ $("#researchText").textContent=result;
+ $("#copyResearch").addEventListener("click",()=>copyText(result));
+}
+$("#makeResearch").addEventListener("click",makeResearch);
+
+/* Writing studio */
+function makeWriting(){
+ const topic=clean($("#writingTopic").value,180);
+ if(!topic){notify("Enter a topic first.");return;}
+ const type=$("#writingType").value;
+ const tone=$("#writingTone").value;
+ const structures={
+  essay:["Introduction","Main point 1 with an example","Main point 2 with evidence","Another perspective","Conclusion"],
+  email:["Subject","Greeting","Reason for writing","Necessary details","Request or next step","Polite closing"],
+  blog:["Clear title","Opening hook","Context and main ideas","Practical examples","Summary and next step"],
+  presentation:["Title and objective","Why it matters","Main points and examples","Summary","Questions or next steps"],
+  project:["Project objective","Problem statement","Background and requirements","Method or implementation","Results and limitations","Conclusion and references"],
+  social:["Opening hook","One key message","Useful detail","Call to action if appropriate"]
+ };
+ const result="WRITING STARTER\n\nTOPIC\n"+topic+"\n\nTONE\n"+tone+"\n\nOUTLINE\n"+structures[type].map((s,i)=>(i+1)+". "+s).join("\n")+
+ "\n\nCHECKLIST\n- Write for the intended audience.\n- Use specific examples.\n- Verify factual claims.\n- Check spelling and clarity.\n- Add references for outside information.\n\nThis is an outline, not a completed factual draft. Add your own details.";
+ showOutput("writingOutput",'<h2>'+escapeHTML(type.charAt(0).toUpperCase()+type.slice(1))+' outline</h2><pre id="writingText" class="code-block"></pre><button class="small" id="copyWriting">Copy outline</button>');
+ $("#writingText").textContent=result;
+ $("#copyWriting").addEventListener("click",()=>copyText(result));
+}
+$("#makeWriting").addEventListener("click",makeWriting);
+
+/* Idea explorer */
+function makeIdea(){
+ const area=$("#ideaArea").value;
+ const skills=clean($("#ideaSkills").value,200)||"basic digital tools";
+ const ideas={
+  "everyday life":{
+   problem:"People forget recurring tasks and follow-ups.",
+   customer:"Households, students or people with recurring responsibilities.",
+   product:"A reusable daily checklist for one specific routine.",
+   test:"Interview five people about one recurring task. Make a simple checklist prototype and ask them to use it for a week."
+  },
+  education:{
+   problem:"Students may struggle to turn a large chapter into manageable revision sessions.",
+   customer:"Students, parents or tutors.",
+   product:"A chapter revision worksheet with short notes and self-test questions.",
+   test:"Ask five learners which revision step is hardest. Make one sample topic pack and see if they use it."
+  },
+  "small businesses":{
+   problem:"Small businesses repeatedly answer the same customer questions.",
+   customer:"One local shop, tutor or repair service.",
+   product:"A simple mobile-friendly information page and FAQ.",
+   test:"Ask five owners which questions repeat. Make a sample page for a willing owner and ask if it saves effort."
+  },
+  developers:{
+   problem:"Beginners struggle to understand common programming errors.",
+   customer:"New programmers learning one language.",
+   product:"A focused troubleshooting guide with tested examples.",
+   test:"Ask five beginners about confusing errors. Create a guide for one recurring issue and ask them to test it."
+  },
+  community:{
+   problem:"Residents can struggle to find current information about a specific local service.",
+   customer:"Residents and a community organisation willing to verify information.",
+   product:"A small directory for one local need.",
+   test:"Verify ten listings with their owners and ask residents whether the directory helps."
+  }
+ };
+ const idea=ideas[area];
+ const result="PRODUCT OPPORTUNITY\n\nAREA\n"+area+
+ "\n\nPROBLEM HYPOTHESIS\n"+idea.problem+
+ "\n\nPOTENTIAL CUSTOMER\n"+idea.customer+
+ "\n\nPRODUCT HYPOTHESIS\n"+idea.product+
+ "\n\nAVAILABLE RESOURCES\n"+skills+
+ "\n\nVALIDATION PLAN\n"+idea.test+
+ "\n\nFIRST ACTIONS\n1. Write five neutral interview questions.\n2. Speak to potential users and record repeated problems.\n3. Build the smallest useful demo.\n4. Ask a user to test it.\n5. Improve the demo based on feedback.\n\nSUCCESS SIGNAL\nSeveral people independently describe the same problem and agree to test a solution.\n\nREALITY CHECK\nThis is a hypothesis, not proof of demand or a promise of revenue. Validate before spending money.";
+ showOutput("ideaOutput",'<h2>Product hypothesis</h2><pre id="ideaText" class="code-block"></pre><button class="small" id="copyIdea">Copy idea plan</button>');
+ $("#ideaText").textContent=result;
+ $("#copyIdea").addEventListener("click",()=>copyText(result));
+}
+$("#makeIdea").addEventListener("click",makeIdea);
+
+/* Project planner */
+function makePlan(){
+ const goal=clean($("#planGoal").value,180);
+ if(!goal){notify("Enter your goal first.");return;}
+ const days=Number($("#planDuration").value);
+ const hours=Number($("#planHours").value);
+ const level=$("#planLevel").value;
+ const stages=[
+  ["Define the result","Write a clear goal and decide what finished work looks like."],
+  ["Learn the essentials","Identify the minimum knowledge and tools needed."],
+  ["Build a tiny version","Make the smallest useful example."],
+  ["Practise the main task","Repeat the core task and change one thing at a time."],
+  ["Review problems","Test what works and fix the most important issue."],
+  ["Improve the result","Make the work clearer and easier to use."],
+  ["Get feedback","Show a safe demo to a trusted person."],
+  ["Fill knowledge gaps","Focus on the biggest gap you discovered."],
+  ["Add one improvement","Choose a useful feature, not just decoration."],
+  ["Test real use","Try the project in its intended environment."],
+  ["Review progress","Compare the result with your original goal."],
+  ["Improve reliability","Check edge cases and error handling."],
+  ["Document the work","Write clear instructions and limitations."],
+  ["Present the result","Prepare a short demonstration."],
+  ["Choose the next step","Use feedback to decide what to improve next."]
+ ];
+ const tasks=[];
+ for(let i=0;i<days;i++)tasks.push({day:i+1,...stages[Math.min(stages.length-1,Math.floor(i*stages.length/days))]});
+ const plain="GOAL: "+goal+"\nDuration: "+days+" days\nLevel: "+level+"\nDaily time: "+hours+" minutes\n\n"+tasks.map(t=>"Day "+t.day+": "+t[0]+"\n"+t[1]).join("\n\n");
+ const list=tasks.map(t=>'<div class="step"><div class="step-number">'+t.day+'</div><div><h3>Day '+t.day+': '+escapeHTML(t[0])+'</h3><p>'+escapeHTML(t[1])+'</p></div></div>').join("");
+ showOutput("planOutput",'<h2>Your '+days+'-day plan</h2><p><strong>Goal:</strong> '+escapeHTML(goal)+'</p><p><strong>Level:</strong> '+escapeHTML(level)+' · <strong>Daily time:</strong> '+(hours===30?"30 minutes":hours===60?"1 hour":"2 hours")+'</p>'+list+'<hr><p class="notice">This is a starter schedule, not a guarantee of completion.</p><button class="small" id="copyPlan">Copy plan</button>');
+ $("#copyPlan").addEventListener("click",()=>copyText(plain));
+}
+$("#makePlan").addEventListener("click",makePlan);
+
+/* Premium is informational only */
+$("#premiumInfo").addEventListener("click",()=>$("#premiumOutput").classList.toggle("hidden"));
+
+/* Initial state */
+redrawChat();
+</script>
+</body>
+</html>
+
 <meta name="theme-color" content="#090b12">
 <title>NEXA — Your Everyday Knowledge Workspace</title>
 <style>
