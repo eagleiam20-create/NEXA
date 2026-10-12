@@ -1,0 +1,308 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nexa AI — Your AI Workspace</title>
+<style>
+:root {
+  --bg:#090b12; --panel:#121521; --line:#252a3b;
+  --text:#f4f5ff; --muted:#9da4bd;
+  --purple:#9272ff; --pink:#f47ac5;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:Inter,system-ui,Arial,sans-serif;
+}
+button,input{font:inherit}
+button{cursor:pointer}
+header{
+  height:72px;padding:0 6%;display:flex;align-items:center;
+  justify-content:space-between;border-bottom:1px solid var(--line);
+  position:sticky;top:0;background:#090b12ee;z-index:5;
+}
+.logo{font-size:22px;font-weight:850;letter-spacing:-1px}
+.logo span{color:var(--purple)}
+nav{display:flex;gap:22px;align-items:center}
+nav a{color:var(--muted);text-decoration:none;font-size:14px}
+.wrap{max-width:1100px;margin:auto;padding:32px 22px 70px}
+.hero{padding:48px 0 32px}
+.tag{
+  display:inline-block;color:#c8baff;background:#1c1831;
+  padding:8px 12px;border-radius:30px;font-size:12px;
+}
+h1{font-size:clamp(36px,6vw,65px);line-height:1.06;
+  letter-spacing:-2px;margin:20px 0}
+h1 span{
+  background:linear-gradient(90deg,#a58aff,#f48bcf);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+p{color:var(--muted);line-height:1.65}
+.hero p{max-width:590px}
+.btn{
+  border:0;border-radius:11px;padding:12px 17px;
+  background:linear-gradient(110deg,var(--purple),#7453e9);
+  color:white;font-weight:750;
+}
+.btn.secondary{background:#1a1e2d;border:1px solid var(--line)}
+.btn.small{padding:9px 12px;font-size:13px}
+.section-head{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:12px;margin:36px 0 18px;
+}
+h2{font-size:23px;margin:0}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.card{
+  background:var(--panel);border:1px solid var(--line);
+  padding:20px;border-radius:18px;min-width:0;
+  transition:transform .2s,border-color .2s;
+}
+.card:hover{transform:translateY(-3px);border-color:#6854b2}
+.tool-icon{
+  width:47px;height:47px;border-radius:14px;
+  display:grid;place-items:center;background:#25203d;font-size:23px;
+}
+.card h3{margin:16px 0 6px}
+.card p{font-size:13px;min-height:43px}
+.card .btn{width:100%;margin-top:10px}
+.pill{
+  font-size:11px;color:#c6b8ff;border:1px solid #44396a;
+  padding:5px 8px;border-radius:20px;
+}
+.card-top{display:flex;justify-content:space-between;align-items:center}
+.prices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.price{font-size:29px;font-weight:850;margin:18px 0}
+.price small{font-size:12px;color:var(--muted);font-weight:400}
+ul{padding-left:18px;color:var(--muted);font-size:13px;line-height:2}
+footer{border-top:1px solid var(--line);padding:25px;text-align:center;color:var(--muted);font-size:12px}
+.modal{
+  position:fixed;inset:0;background:#000b;z-index:10;
+  display:none;align-items:center;justify-content:center;padding:16px;
+}
+.modal.show{display:flex}
+.dialog{
+  width:min(620px,100%);max-height:90vh;overflow:auto;
+  background:var(--panel);border:1px solid var(--line);
+  border-radius:20px;padding:22px;
+}
+.dialog-head{display:flex;justify-content:space-between;gap:12px}
+.close{background:none;border:0;color:white;font-size:25px}
+#messages{
+  height:270px;overflow:auto;border:1px solid var(--line);
+  background:#0c0f18;border-radius:12px;padding:12px;margin:14px 0;
+}
+.msg{padding:10px 12px;border-radius:12px;margin:8px 0;
+  max-width:90%;white-space:pre-wrap;font-size:14px;line-height:1.5}
+.bot{background:#1b2030}
+.user{background:#382d62;margin-left:auto}
+.chat-form{display:flex;gap:8px}
+.chat-form input{
+  flex:1;min-width:0;background:#0c0f18;color:white;
+  border:1px solid var(--line);border-radius:10px;padding:12px;
+}
+.notice{font-size:12px;color:var(--muted)}
+.hidden{display:none!important}
+@media(max-width:760px){
+  nav a:not(.always){display:none}
+  .grid,.prices{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .hero{padding-top:25px}
+}
+@media(max-width:480px){
+  .grid,.prices{grid-template-columns:1fr}
+  header{padding:0 16px}
+  .wrap{padding:22px 16px 45px}
+  h1{letter-spacing:-1px}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">nexa<span>.</span>ai</div>
+  <nav>
+    <a href="#tools">AI Tools</a>
+    <a href="#plans">Plans</a>
+    <button class="btn small" onclick="openChat('Free AI Trial')">Try Free</button>
+  </nav>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <span class="tag">✦ ONE WORKSPACE. MANY POSSIBILITIES.</span>
+    <h1>Your ideas.<br><span>Your AI workspace.</span></h1>
+    <p>Explore AI assistants for learning, coding, writing and research—all through one simple workspace.</p>
+    <button class="btn" onclick="document.querySelector('#tools').scrollIntoView({behavior:'smooth'})">
+      Explore AI Tools →
+    </button>
+    <button class="btn secondary" onclick="openChat('Free AI Trial')">Try one demo</button>
+    <p class="notice">Prototype preview: demo answers are simulated. No paid AI model is connected yet.</p>
+  </section>
+
+  <section id="tools">
+    <div class="section-head">
+      <h2>Explore AI tools</h2>
+      <span class="pill">WORKSPACE</span>
+    </div>
+    <div class="grid" id="toolGrid"></div>
+  </section>
+
+  <section id="plans">
+    <div class="section-head">
+      <h2>Simple plans</h2>
+      <span class="pill">SAMPLE PRICING</span>
+    </div>
+    <p>These prices are examples for testing the idea, not active subscriptions.</p>
+    <div class="prices">
+      <article class="card">
+        <span class="pill">START HERE</span>
+        <h3>Free Trial</h3>
+        <div class="price">₹0</div>
+        <ul><li>Explore the interface</li><li>One demo conversation</li><li>No payment required</li></ul>
+        <button class="btn secondary" onclick="openChat('Free AI Trial')">Try free</button>
+      </article>
+      <article class="card">
+        <span class="pill">EXAMPLE PLAN</span>
+        <h3>Starter</h3>
+        <div class="price">₹99 <small>/ example</small></div>
+        <ul><li>Proposed usage credits</li><li>Tool-specific access</li><li>Clear usage limits</li></ul>
+        <button class="btn" onclick="subscribe('Starter')">View plan</button>
+      </article>
+      <article class="card">
+        <span class="pill">EXAMPLE PLAN</span>
+        <h3>Plus</h3>
+        <div class="price">₹499 <small>/ example</small></div>
+        <ul><li>Higher proposed limits</li><li>Eligible model choices</li><li>Usage tracking</li></ul>
+        <button class="btn" onclick="subscribe('Plus')">View plan</button>
+      </article>
+    </div>
+  </section>
+</main>
+
+<footer>
+  Nexa AI · Early prototype · Demo only, not a live AI service
+</footer>
+
+<div class="modal" id="chatModal" role="dialog" aria-modal="true" aria-labelledby="chatTitle">
+  <div class="dialog">
+    <div class="dialog-head">
+      <div>
+        <h2 id="chatTitle">Talk to your AI</h2>
+        <p id="modelLabel">Free demo</p>
+      </div>
+      <button class="close" aria-label="Close" onclick="closeChat()">×</button>
+    </div>
+    <label for="modelSelect">Choose demo assistant</label>
+    <select id="modelSelect" style="width:100%;padding:11px;margin-top:8px;background:#0c0f18;color:white;border:1px solid #252a3b;border-radius:10px">
+      <option>General Assistant (Demo)</option>
+      <option>Study Assistant (Demo)</option>
+      <option>Coding Assistant (Demo)</option>
+      <option>Writing Assistant (Demo)</option>
+    </select>
+    <div id="messages" aria-live="polite">
+      <div class="msg bot">Welcome! This is a UI demo. Send a message to preview the chat experience.</div>
+    </div>
+    <form class="chat-form" id="chatForm">
+      <input id="question" placeholder="Ask your question..." required maxlength="1000">
+      <button class="btn" type="submit">Send</button>
+    </form>
+    <p class="notice">Demo only. Do not enter private or sensitive information. Replies are not generated by a live AI model.</p>
+  </div>
+</div>
+
+<div class="modal" id="planModal" role="dialog" aria-modal="true" aria-labelledby="planTitle">
+  <div class="dialog">
+    <div class="dialog-head">
+      <h2 id="planTitle">Plan preview</h2>
+      <button class="close" aria-label="Close" onclick="closePlan()">×</button>
+    </div>
+    <p id="planText"></p>
+    <p class="notice">No payment has been taken. Checkout will be added only after pricing, model costs and account requirements are confirmed.</p>
+    <button class="btn" onclick="closePlan()">Got it</button>
+  </div>
+</div>
+
+<script>
+const tools = [
+  {name:"AI Chat",icon:"✦",desc:"Ask questions and explore ideas.",label:"General",model:"General Assistant (Demo)"},
+  {name:"Study Assistant",icon:"📚",desc:"Understand topics step by step.",label:"Learning",model:"Study Assistant (Demo)"},
+  {name:"Coding Assistant",icon:"⌘",desc:"Explore code and programming concepts.",label:"Coding",model:"Coding Assistant (Demo)"},
+  {name:"Writing Assistant",icon:"✍️",desc:"Draft, improve and organize text.",label:"Writing",model:"Writing Assistant (Demo)"},
+  {name:"Research Assistant",icon:"⌕",desc:"Organize research questions and ideas.",label:"Research",model:"General Assistant (Demo)"},
+  {name:"Creative Studio",icon:"✧",desc:"Brainstorm concepts and creative projects.",label:"Creative",model:"General Assistant (Demo)"}
+];
+
+const grid = document.getElementById("toolGrid");
+tools.forEach(tool => {
+  const card = document.createElement("article");
+  card.className = "card";
+  card.innerHTML = `
+    <div class="card-top">
+      <div class="tool-icon">${tool.icon}</div>
+      <span class="pill">${tool.label}</span>
+    </div>
+    <h3>${tool.name}</h3>
+    <p>${tool.desc}</p>
+    <button class="btn secondary">Explore tool →</button>
+  `;
+  card.querySelector("button").addEventListener("click", () => openChat(tool.model));
+  grid.appendChild(card);
+});
+
+const chatModal = document.getElementById("chatModal");
+const planModal = document.getElementById("planModal");
+const modelSelect = document.getElementById("modelSelect");
+const messages = document.getElementById("messages");
+
+function openChat(model) {
+  chatModal.classList.add("show");
+  modelSelect.value = model;
+  document.getElementById("modelLabel").textContent = "Interactive interface preview";
+  document.getElementById("question").focus();
+}
+function closeChat(){chatModal.classList.remove("show")}
+function closePlan(){planModal.classList.remove("show")}
+
+function subscribe(plan) {
+  document.getElementById("planTitle").textContent = plan + " plan";
+  document.getElementById("planText").textContent =
+    "You selected the " + plan + " example plan. Real subscriptions are not enabled in this prototype.";
+  planModal.classList.add("show");
+}
+
+document.getElementById("chatForm").addEventListener("submit", event => {
+  event.preventDefault();
+  const input = document.getElementById("question");
+  const question = input.value.trim();
+  if (!question) return;
+
+  addMessage(question, "user");
+  input.value = "";
+
+  const answer =
+    "This is a demo response, not a live AI answer. Your question was received by the prototype. In the next phase, we can connect a properly licensed AI model to generate real answers.";
+  addMessage(answer, "bot");
+});
+
+function addMessage(text, type) {
+  const bubble = document.createElement("div");
+  bubble.className = "msg " + type;
+  bubble.textContent = text;
+  messages.appendChild(bubble);
+  messages.scrollTop = messages.scrollHeight;
+}
+
+[chatModal,planModal].forEach(modal => {
+  modal.addEventListener("click", event => {
+    if(event.target === modal) modal.classList.remove("show");
+  });
+});
+document.addEventListener("keydown", event => {
+  if(event.key === "Escape") {
+    closeChat();
+    closePlan();
+  }
+});
+</script>
+</body>
+</html>
