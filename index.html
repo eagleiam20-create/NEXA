@@ -3,306 +3,817 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nexa AI — Your AI Workspace</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#080912">
+<meta name="description" content="Nexa AI — your futuristic AI workspace prototype.">
+<title>Nexa AI — Future Workspace</title>
 <style>
 :root {
-  --bg:#090b12; --panel:#121521; --line:#252a3b;
-  --text:#f4f5ff; --muted:#9da4bd;
-  --purple:#9272ff; --pink:#f47ac5;
+  --bg:#080912;
+  --panel:#111424;
+  --panel2:#171a2c;
+  --line:#2b3046;
+  --text:#f5f5ff;
+  --muted:#a1a8c1;
+  --purple:#9b7bff;
+  --pink:#f47ac5;
+  --cyan:#78e7ff;
 }
 *{box-sizing:border-box}
+html{scroll-behavior:smooth}
 body{
-  margin:0;background:var(--bg);color:var(--text);
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
   font-family:Inter,system-ui,Arial,sans-serif;
+  min-height:100vh;
 }
-button,input{font:inherit}
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  pointer-events:none;
+  background:
+    radial-gradient(ellipse at 10% 0%,#45208045,transparent 35%),
+    radial-gradient(ellipse at 95% 20%,#12566b30,transparent 30%);
+}
+button,input,textarea,select{font:inherit}
 button{cursor:pointer}
+button:focus-visible,input:focus-visible,
+textarea:focus-visible,select:focus-visible,a:focus-visible{
+  outline:2px solid var(--cyan);
+  outline-offset:3px;
+}
+a{color:inherit;text-decoration:none}
+.muted{color:var(--muted)}
+.small-text{font-size:12px;line-height:1.6;color:var(--muted)}
+.eyebrow{
+  color:#c7b8ff;
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:1.7px;
+  text-transform:uppercase;
+}
 header{
-  height:72px;padding:0 6%;display:flex;align-items:center;
-  justify-content:space-between;border-bottom:1px solid var(--line);
-  position:sticky;top:0;background:#090b12ee;z-index:5;
+  height:70px;
+  padding:0 5%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  position:sticky;
+  top:0;
+  z-index:10;
+  background:#080912ed;
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--line);
 }
-.logo{font-size:22px;font-weight:850;letter-spacing:-1px}
+.logo{
+  font-size:22px;
+  font-weight:900;
+  letter-spacing:-1px;
+  white-space:nowrap;
+}
 .logo span{color:var(--purple)}
-nav{display:flex;gap:22px;align-items:center}
-nav a{color:var(--muted);text-decoration:none;font-size:14px}
-.wrap{max-width:1100px;margin:auto;padding:32px 22px 70px}
-.hero{padding:48px 0 32px}
-.tag{
-  display:inline-block;color:#c8baff;background:#1c1831;
-  padding:8px 12px;border-radius:30px;font-size:12px;
-}
-h1{font-size:clamp(36px,6vw,65px);line-height:1.06;
-  letter-spacing:-2px;margin:20px 0}
-h1 span{
-  background:linear-gradient(90deg,#a58aff,#f48bcf);
-  -webkit-background-clip:text;background-clip:text;color:transparent;
-}
-p{color:var(--muted);line-height:1.65}
-.hero p{max-width:590px}
+nav{display:flex;align-items:center;gap:22px}
+nav a{font-size:13px;color:var(--muted)}
+nav a:hover{color:white}
 .btn{
-  border:0;border-radius:11px;padding:12px 17px;
-  background:linear-gradient(110deg,var(--purple),#7453e9);
-  color:white;font-weight:750;
+  border:1px solid transparent;
+  border-radius:12px;
+  padding:12px 16px;
+  background:linear-gradient(110deg,#a18aff,#7551e8);
+  color:white;
+  font-weight:750;
+  transition:transform .2s,filter .2s;
 }
-.btn.secondary{background:#1a1e2d;border:1px solid var(--line)}
-.btn.small{padding:9px 12px;font-size:13px}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.1)}
+.btn.secondary{
+  background:#191d2e;
+  border-color:var(--line);
+}
+.btn.small{padding:9px 12px;font-size:12px}
+.wrap{max-width:1160px;margin:auto;padding:0 22px 65px}
+.hero{
+  min-height:440px;
+  padding:65px 0 45px;
+  display:grid;
+  grid-template-columns:1.1fr .9fr;
+  align-items:center;
+  gap:25px;
+}
+.status{
+  display:inline-flex;
+  gap:8px;
+  align-items:center;
+  padding:8px 12px;
+  border:1px solid #49406c;
+  background:#18152b;
+  border-radius:40px;
+  color:#d8ceff;
+  font-size:11px;
+}
+.dot{
+  width:7px;height:7px;border-radius:50%;
+  background:#86efac;
+  box-shadow:0 0 12px #86efac;
+}
+h1{
+  font-size:clamp(42px,6.5vw,76px);
+  letter-spacing:-3px;
+  line-height:1;
+  margin:23px 0 18px;
+}
+.gradient{
+  background:linear-gradient(100deg,#c3adff,#f49ad5,#83e9ff);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+.hero p{max-width:570px;line-height:1.8;color:var(--muted)}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin:22px 0 12px}
+.orbital{
+  position:relative;
+  height:300px;
+  display:grid;
+  place-items:center;
+}
+.ring{
+  position:absolute;
+  width:245px;height:245px;
+  border:1px solid #9b7bff55;
+  border-radius:50%;
+  animation:spin 24s linear infinite;
+}
+.ring.two{
+  width:195px;height:195px;
+  border-color:#78e7ff55;
+  animation-direction:reverse;
+  animation-duration:18s;
+}
+.orb{
+  width:135px;height:135px;
+  border-radius:45%;
+  background:radial-gradient(circle at 30% 25%,#fff,#c2aaff 20%,#6850ce 55%,#111424 80%);
+  box-shadow:0 0 60px #9b7bff70,0 0 110px #9b7bff30;
+  animation:float 5s ease-in-out infinite;
+  display:grid;
+  place-items:center;
+  font-size:52px;
+}
+.chip{
+  position:absolute;
+  z-index:2;
+  background:#131728eF;
+  border:1px solid #383d55;
+  border-radius:12px;
+  padding:11px 13px;
+  font-size:12px;
+  animation:float 6s ease-in-out infinite;
+}
+.chip.a{top:25px;left:0}
+.chip.b{right:0;top:80px;animation-delay:-2s}
+.chip.c{bottom:25px;left:12%;animation-delay:-4s}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes float{50%{translate:0 -9px}}
+.section{padding:22px 0 30px;scroll-margin-top:90px}
 .section-head{
-  display:flex;align-items:center;justify-content:space-between;
-  gap:12px;margin:36px 0 18px;
+  display:flex;
+  align-items:end;
+  justify-content:space-between;
+  gap:15px;
+  margin:15px 0 20px;
 }
-h2{font-size:23px;margin:0}
-.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+h2{font-size:clamp(22px,3vw,29px);margin:7px 0}
+h3{font-size:16px;margin:0}
+.section-head p{max-width:450px;font-size:13px;color:var(--muted);line-height:1.6}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+.search{flex:1;min-width:180px}
+.search input{
+  width:100%;
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:12px;
+  color:white;
+  padding:12px;
+}
+.filters{display:flex;gap:7px;flex-wrap:wrap}
+.filter{
+  background:var(--panel);
+  border:1px solid var(--line);
+  color:var(--muted);
+  border-radius:30px;
+  padding:9px 12px;
+  font-size:12px;
+}
+.filter.active{background:#302449;border-color:var(--purple);color:white}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
 .card{
-  background:var(--panel);border:1px solid var(--line);
-  padding:20px;border-radius:18px;min-width:0;
-  transition:transform .2s,border-color .2s;
+  position:relative;
+  min-width:0;
+  padding:20px;
+  border-radius:18px;
+  background:linear-gradient(145deg,#15192b,#0e111d);
+  border:1px solid var(--line);
+  transition:transform .2s,border-color .2s,box-shadow .2s;
 }
-.card:hover{transform:translateY(-3px);border-color:#6854b2}
+.card:hover{
+  transform:translateY(-3px);
+  border-color:#7962c7;
+  box-shadow:0 12px 30px #0003;
+}
+.card-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .tool-icon{
-  width:47px;height:47px;border-radius:14px;
-  display:grid;place-items:center;background:#25203d;font-size:23px;
+  width:46px;height:46px;
+  display:grid;place-items:center;
+  border-radius:14px;
+  background:#28213f;
+  border:1px solid #504276;
+  font-size:22px;
 }
-.card h3{margin:16px 0 6px}
-.card p{font-size:13px;min-height:43px}
-.card .btn{width:100%;margin-top:10px}
 .pill{
-  font-size:11px;color:#c6b8ff;border:1px solid #44396a;
-  padding:5px 8px;border-radius:20px;
+  font-size:10px;
+  padding:5px 8px;
+  border:1px solid #453968;
+  color:#d0c2ff;
+  border-radius:30px;
 }
-.card-top{display:flex;justify-content:space-between;align-items:center}
-.prices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
-.price{font-size:29px;font-weight:850;margin:18px 0}
+.card h3{margin:17px 0 7px}
+.card p{color:var(--muted);font-size:13px;line-height:1.7;min-height:44px}
+.card-bottom{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.text-btn{
+  border:0;background:none;color:#d1c4ff;
+  font-weight:800;font-size:12px;padding:8px 0;
+}
+.quick-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.quick{
+  display:flex;align-items:center;gap:12px;
+  text-align:left;color:white;background:var(--panel);
+  border:1px solid var(--line);border-radius:14px;padding:15px;
+}
+.quick:hover{border-color:var(--purple)}
+.quick-icon{font-size:22px}
+.quick strong{display:block;font-size:12px}
+.quick small{display:block;margin-top:5px;font-size:11px;color:var(--muted)}
+.feature-grid,.plans{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.feature{padding:23px}
+.feature p,.plan p{font-size:13px;color:var(--muted);line-height:1.7}
+.feature ul,.plan ul{padding-left:18px;color:var(--muted);font-size:13px;line-height:2}
+.plan{padding:22px}
+.plan.featured{border-color:#9b7bff;box-shadow:0 0 30px #9b7bff12}
+.price{font-size:31px;font-weight:900;margin:16px 0}
 .price small{font-size:12px;color:var(--muted);font-weight:400}
-ul{padding-left:18px;color:var(--muted);font-size:13px;line-height:2}
-footer{border-top:1px solid var(--line);padding:25px;text-align:center;color:var(--muted);font-size:12px}
+.plan .btn{width:100%;margin-top:10px}
+.workbench{padding:22px}
+.workbench textarea{
+  width:100%;min-height:105px;resize:vertical;
+  margin:12px 0;padding:13px;
+  border:1px solid var(--line);border-radius:12px;
+  background:#090c16;color:white;
+}
+.output{
+  white-space:pre-wrap;overflow-wrap:anywhere;
+  background:#090c16;border:1px dashed #393e55;
+  border-radius:12px;padding:15px;
+  color:var(--muted);font-size:13px;line-height:1.8;
+  min-height:65px;
+}
+footer{
+  text-align:center;border-top:1px solid var(--line);
+  padding:28px 15px;color:var(--muted);font-size:12px;
+}
 .modal{
-  position:fixed;inset:0;background:#000b;z-index:10;
-  display:none;align-items:center;justify-content:center;padding:16px;
+  position:fixed;inset:0;z-index:30;
+  display:none;align-items:center;justify-content:center;
+  padding:15px;background:#02030bdc;backdrop-filter:blur(8px);
 }
 .modal.show{display:flex}
 .dialog{
-  width:min(620px,100%);max-height:90vh;overflow:auto;
-  background:var(--panel);border:1px solid var(--line);
-  border-radius:20px;padding:22px;
+  width:min(680px,100%);max-height:90vh;overflow:auto;
+  padding:22px;border:1px solid #393e55;border-radius:20px;
+  background:#111525;box-shadow:0 25px 90px #0008;
 }
-.dialog-head{display:flex;justify-content:space-between;gap:12px}
-.close{background:none;border:0;color:white;font-size:25px}
-#messages{
-  height:270px;overflow:auto;border:1px solid var(--line);
-  background:#0c0f18;border-radius:12px;padding:12px;margin:14px 0;
+.dialog-head{display:flex;justify-content:space-between;gap:15px;align-items:start}
+.close{
+  width:36px;height:36px;border-radius:10px;
+  border:1px solid var(--line);background:#191d2d;color:white;font-size:22px;
 }
-.msg{padding:10px 12px;border-radius:12px;margin:8px 0;
-  max-width:90%;white-space:pre-wrap;font-size:14px;line-height:1.5}
-.bot{background:#1b2030}
-.user{background:#382d62;margin-left:auto}
+.chat-meta{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:15px 0}
+select{
+  max-width:100%;padding:10px;
+  border-radius:10px;border:1px solid var(--line);
+  background:#090c16;color:white;
+}
+.messages{
+  height:290px;overflow:auto;padding:12px;
+  border:1px solid var(--line);border-radius:13px;
+  background:#090c16;margin:13px 0;
+}
+.msg{
+  max-width:90%;white-space:pre-wrap;overflow-wrap:anywhere;
+  padding:11px 13px;border-radius:12px;
+  margin:8px 0;font-size:13px;line-height:1.65;
+}
+.msg.bot{background:#1a1f30}
+.msg.user{background:#3a2e65;margin-left:auto}
 .chat-form{display:flex;gap:8px}
 .chat-form input{
-  flex:1;min-width:0;background:#0c0f18;color:white;
-  border:1px solid var(--line);border-radius:10px;padding:12px;
+  flex:1;min-width:0;padding:12px;
+  border:1px solid var(--line);border-radius:11px;
+  background:#090c16;color:white;
 }
-.notice{font-size:12px;color:var(--muted)}
-.hidden{display:none!important}
-@media(max-width:760px){
-  nav a:not(.always){display:none}
-  .grid,.prices{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .hero{padding-top:25px}
+.chat-actions{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.notice{font-size:11px;line-height:1.6;color:var(--muted)}
+.toast{
+  position:fixed;z-index:50;bottom:18px;left:50%;
+  translate:-50% 15px;opacity:0;pointer-events:none;
+  background:#20253a;border:1px solid #484e68;
+  border-radius:12px;padding:12px 16px;font-size:13px;
+  transition:opacity .2s,translate .2s;
 }
-@media(max-width:480px){
-  .grid,.prices{grid-template-columns:1fr}
-  header{padding:0 16px}
-  .wrap{padding:22px 16px 45px}
-  h1{letter-spacing:-1px}
+.toast.show{opacity:1;translate:-50% 0}
+.empty{grid-column:1/-1;text-align:center;padding:25px;color:var(--muted)}
+@media(max-width:850px){
+  .hero{grid-template-columns:1fr;padding-top:45px}
+  .orbital{height:230px;max-width:480px;width:100%;margin:auto}
+  .ring{width:210px;height:210px}
+  .ring.two{width:170px;height:170px}
+  .orb{width:110px;height:110px}
+  .grid,.feature-grid,.plans{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .quick-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:580px){
+  header{height:64px;padding:0 14px}
+  nav{gap:10px}
+  nav a{display:none}
+  .wrap{padding:0 15px 45px}
+  .hero{padding-top:38px;gap:5px}
+  h1{letter-spacing:-2px}
+  .orbital{height:200px}
+  .chip{font-size:10px;padding:9px}
+  .grid,.feature-grid,.plans{grid-template-columns:1fr}
+  .section-head{align-items:start;flex-direction:column}
+  .quick-grid{grid-template-columns:1fr 1fr}
+  .dialog{padding:15px}
+  .chat-form{flex-wrap:wrap}
+  .chat-form input{flex-basis:100%}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation:none!important;transition:none!important;
+    scroll-behavior:auto!important;
+  }
 }
 </style>
 </head>
 <body>
+
 <header>
-  <div class="logo">nexa<span>.</span>ai</div>
+  <a href="#" class="logo">NEXA<span>.</span>AI</a>
   <nav>
-    <a href="#tools">AI Tools</a>
+    <a href="#tools">Explore</a>
+    <a href="#workbench">Workbench</a>
     <a href="#plans">Plans</a>
-    <button class="btn small" onclick="openChat('Free AI Trial')">Try Free</button>
+    <button class="btn small" id="openWorkspace">Open workspace ↗</button>
   </nav>
 </header>
 
 <main class="wrap">
   <section class="hero">
-    <span class="tag">✦ ONE WORKSPACE. MANY POSSIBILITIES.</span>
-    <h1>Your ideas.<br><span>Your AI workspace.</span></h1>
-    <p>Explore AI assistants for learning, coding, writing and research—all through one simple workspace.</p>
-    <button class="btn" onclick="document.querySelector('#tools').scrollIntoView({behavior:'smooth'})">
-      Explore AI Tools →
-    </button>
-    <button class="btn secondary" onclick="openChat('Free AI Trial')">Try one demo</button>
-    <p class="notice">Prototype preview: demo answers are simulated. No paid AI model is connected yet.</p>
+    <div>
+      <span class="status"><span class="dot"></span> FUTURE WORKSPACE · DEMO</span>
+      <h1>Think beyond.<br><span class="gradient">Create with Nexa.</span></h1>
+      <p>One focused space for ideas, learning, code and creativity. Explore purpose-built assistant experiences and shape your next big idea.</p>
+      <div class="actions">
+        <button class="btn" id="heroStart">Enter the workspace ↗</button>
+        <a class="btn secondary" href="#tools">Explore assistants ↓</a>
+      </div>
+      <p class="small-text">Prototype preview: replies are simulated. No live AI model or payment system is connected.</p>
+    </div>
+    <div class="orbital" aria-hidden="true">
+      <div class="ring"></div><div class="ring two"></div>
+      <div class="orb">✦</div>
+      <div class="chip a">✦ Idea engine</div>
+      <div class="chip b">◈ One workspace</div>
+      <div class="chip c">⌘ Create · Learn · Build</div>
+    </div>
   </section>
 
-  <section id="tools">
+  <section class="section">
     <div class="section-head">
-      <h2>Explore AI tools</h2>
-      <span class="pill">WORKSPACE</span>
+      <div><div class="eyebrow">Start with a goal</div><h2>What are we working on?</h2></div>
+      <p class="muted">Choose a shortcut to open a demo assistant with a starter prompt.</p>
+    </div>
+    <div class="quick-grid">
+      <button class="quick" data-prompt="Explain a difficult topic in simple words with one example.">
+        <span class="quick-icon">◉</span><span><strong>Learn something</strong><small>Understand a topic</small></span>
+      </button>
+      <button class="quick" data-prompt="Help me plan a small project with three clear steps.">
+        <span class="quick-icon">⌘</span><span><strong>Plan a project</strong><small>Turn ideas into steps</small></span>
+      </button>
+      <button class="quick" data-prompt="Help me improve a piece of writing. Ask what you need first.">
+        <span class="quick-icon">✎</span><span><strong>Improve writing</strong><small>Make words clearer</small></span>
+      </button>
+      <button class="quick" data-prompt="Give me a beginner coding challenge without the solution.">
+        <span class="quick-icon">⌁</span><span><strong>Practice coding</strong><small>Build your skills</small></span>
+      </button>
+    </div>
+  </section>
+
+  <section class="section" id="tools">
+    <div class="section-head">
+      <div><div class="eyebrow">Your toolkit</div><h2>Explore AI assistants</h2></div>
+      <span class="pill">6 DEMO TOOLS</span>
+    </div>
+    <div class="toolbar">
+      <label class="search"><input id="toolSearch" type="search" placeholder="Search tools..." aria-label="Search tools"></label>
+      <div class="filters" id="filters">
+        <button class="filter active" data-filter="All">All</button>
+        <button class="filter" data-filter="Learn">Learn</button>
+        <button class="filter" data-filter="Build">Build</button>
+        <button class="filter" data-filter="Create">Create</button>
+      </div>
     </div>
     <div class="grid" id="toolGrid"></div>
   </section>
 
-  <section id="plans">
+  <section class="section" id="workbench">
     <div class="section-head">
-      <h2>Simple plans</h2>
+      <div><div class="eyebrow">Make something useful</div><h2>Your mini workbench</h2></div>
+      <span class="pill">LOCAL DEMO</span>
+    </div>
+    <div class="card workbench">
+      <h3>Turn a thought into a project brief</h3>
+      <p class="small-text">Enter a goal to generate a sample template locally. Your text is not sent to an AI service.</p>
+      <textarea id="briefInput" maxlength="1200" placeholder="Example: I want to create a study planner for students..."></textarea>
+      <div class="actions">
+        <button class="btn" id="makeBrief">Generate demo brief</button>
+        <button class="btn secondary" id="clearBrief">Clear</button>
+      </div>
+      <div class="output" id="briefOutput" aria-live="polite">Your project brief will appear here.</div>
+      <div class="chat-actions"><button class="btn small secondary" id="copyBrief">Copy brief</button></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div><div class="eyebrow">Designed for focus</div><h2>Less switching. More doing.</h2></div>
+    </div>
+    <div class="feature-grid">
+      <article class="card">
+        <div class="tool-icon">◈</div>
+        <h3 style="margin-top:16px">One place for ideas</h3>
+        <p class="muted">Use focused assistants for different tasks without a cluttered interface.</p>
+        <ul><li>Quick-start prompts</li><li>Searchable tool directory</li><li>Copyable workbench output</li></ul>
+      </article>
+      <article class="card">
+        <div class="tool-icon">⌁</div>
+        <h3 style="margin-top:16px">Transparent by design</h3>
+        <p class="muted">Nexa makes it clear which features are only prototypes.</p>
+        <ul><li>No fake live AI claims</li><li>No pretend checkout</li><li>No external libraries required</li></ul>
+      </article>
+    </div>
+  </section>
+
+  <section class="section" id="plans">
+    <div class="section-head">
+      <div><div class="eyebrow">Possible business model</div><h2>Plans, not promises.</h2></div>
       <span class="pill">SAMPLE PRICING</span>
     </div>
-    <p>These prices are examples for testing the idea, not active subscriptions.</p>
-    <div class="prices">
-      <article class="card">
-        <span class="pill">START HERE</span>
-        <h3>Free Trial</h3>
+    <p class="small-text">Prices and features are examples for product design only. No plan can currently be purchased.</p>
+    <div class="plans">
+      <article class="card plan">
+        <span class="pill">EXPLORE</span><h3 style="margin-top:16px">Free</h3>
         <div class="price">₹0</div>
-        <ul><li>Explore the interface</li><li>One demo conversation</li><li>No payment required</li></ul>
-        <button class="btn secondary" onclick="openChat('Free AI Trial')">Try free</button>
+        <p>For trying the workspace concept.</p>
+        <ul><li>Demo tools</li><li>Sample interactions</li><li>No payment required</li></ul>
+        <button class="btn secondary planBtn" data-plan="Free">Preview plan</button>
       </article>
-      <article class="card">
-        <span class="pill">EXAMPLE PLAN</span>
-        <h3>Starter</h3>
+      <article class="card plan featured">
+        <span class="pill">POSSIBLE STARTER</span><h3 style="margin-top:16px">Starter</h3>
         <div class="price">₹99 <small>/ example</small></div>
-        <ul><li>Proposed usage credits</li><li>Tool-specific access</li><li>Clear usage limits</li></ul>
-        <button class="btn" onclick="subscribe('Starter')">View plan</button>
+        <p>Illustrative price only; not for sale.</p>
+        <ul><li>Proposed usage allowance</li><li>Workspace history concept</li><li>Clear limits before checkout</li></ul>
+        <button class="btn planBtn" data-plan="Starter">Preview plan</button>
       </article>
-      <article class="card">
-        <span class="pill">EXAMPLE PLAN</span>
-        <h3>Plus</h3>
+      <article class="card plan">
+        <span class="pill">POSSIBLE PLUS</span><h3 style="margin-top:16px">Plus</h3>
         <div class="price">₹499 <small>/ example</small></div>
-        <ul><li>Higher proposed limits</li><li>Eligible model choices</li><li>Usage tracking</li></ul>
-        <button class="btn" onclick="subscribe('Plus')">View plan</button>
+        <p>Illustrative price only; not for sale.</p>
+        <ul><li>Proposed higher usage</li><li>Eligible model choices concept</li><li>Usage transparency</li></ul>
+        <button class="btn secondary planBtn" data-plan="Plus">Preview plan</button>
       </article>
     </div>
   </section>
 </main>
 
-<footer>
-  Nexa AI · Early prototype · Demo only, not a live AI service
-</footer>
+<footer>NEXA.AI · Futuristic product prototype · Demo responses only · No live AI or payments</footer>
 
 <div class="modal" id="chatModal" role="dialog" aria-modal="true" aria-labelledby="chatTitle">
   <div class="dialog">
     <div class="dialog-head">
-      <div>
-        <h2 id="chatTitle">Talk to your AI</h2>
-        <p id="modelLabel">Free demo</p>
-      </div>
-      <button class="close" aria-label="Close" onclick="closeChat()">×</button>
+      <div><div class="eyebrow">Nexa workspace</div><h2 id="chatTitle">Talk to your demo assistant</h2>
+      <p class="small-text">A simulated preview of the chat experience.</p></div>
+      <button class="close" id="closeChat" aria-label="Close chat">×</button>
     </div>
-    <label for="modelSelect">Choose demo assistant</label>
-    <select id="modelSelect" style="width:100%;padding:11px;margin-top:8px;background:#0c0f18;color:white;border:1px solid #252a3b;border-radius:10px">
-      <option>General Assistant (Demo)</option>
-      <option>Study Assistant (Demo)</option>
-      <option>Coding Assistant (Demo)</option>
-      <option>Writing Assistant (Demo)</option>
-    </select>
-    <div id="messages" aria-live="polite">
-      <div class="msg bot">Welcome! This is a UI demo. Send a message to preview the chat experience.</div>
+    <div class="chat-meta">
+      <label class="small-text" for="assistantSelect">Assistant</label>
+      <select id="assistantSelect">
+        <option>General Assistant (Demo)</option>
+        <option>Study Assistant (Demo)</option>
+        <option>Coding Assistant (Demo)</option>
+        <option>Writing Assistant (Demo)</option>
+        <option>Research Assistant (Demo)</option>
+        <option>Creative Assistant (Demo)</option>
+      </select>
+      <button class="btn small secondary" id="newChat">New chat</button>
+    </div>
+    <div class="messages" id="messages" aria-live="polite">
+      <div class="msg bot">Welcome to Nexa! This is a simulated demo, not a live AI service.</div>
+    </div>
+    <div class="chat-actions">
+      <button class="filter samplePrompt" data-prompt="Help me make a simple plan for learning a new skill.">Make a plan</button>
+      <button class="filter samplePrompt" data-prompt="Explain a difficult idea in simple words with one example.">Explain simply</button>
+      <button class="filter samplePrompt" data-prompt="Give me a beginner coding challenge without the solution.">Coding practice</button>
     </div>
     <form class="chat-form" id="chatForm">
-      <input id="question" placeholder="Ask your question..." required maxlength="1000">
-      <button class="btn" type="submit">Send</button>
+      <input id="question" placeholder="Write a message..." maxlength="1000" required autocomplete="off">
+      <button class="btn" type="submit">Send ↑</button>
     </form>
-    <p class="notice">Demo only. Do not enter private or sensitive information. Replies are not generated by a live AI model.</p>
+    <div class="chat-actions">
+      <button class="btn small secondary" id="copyChat">Copy conversation</button>
+      <button class="btn small secondary" id="clearChat">Clear chat</button>
+    </div>
+    <p class="notice">Do not enter sensitive information. Replies are fixed sample text, not generated by a live AI model.</p>
   </div>
 </div>
 
 <div class="modal" id="planModal" role="dialog" aria-modal="true" aria-labelledby="planTitle">
   <div class="dialog">
     <div class="dialog-head">
-      <h2 id="planTitle">Plan preview</h2>
-      <button class="close" aria-label="Close" onclick="closePlan()">×</button>
+      <div><div class="eyebrow">Plan details</div><h2 id="planTitle">Plan preview</h2></div>
+      <button class="close" id="closePlan" aria-label="Close plan preview">×</button>
     </div>
-    <p id="planText"></p>
-    <p class="notice">No payment has been taken. Checkout will be added only after pricing, model costs and account requirements are confirmed.</p>
-    <button class="btn" onclick="closePlan()">Got it</button>
+    <p id="planText" class="muted"></p>
+    <p class="notice">No subscription is active and no payment is taken. Real plans require secure checkout, confirmed model costs and clear usage limits.</p>
+    <button class="btn" id="dismissPlan">Understood</button>
   </div>
 </div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
+"use strict";
+
 const tools = [
-  {name:"AI Chat",icon:"✦",desc:"Ask questions and explore ideas.",label:"General",model:"General Assistant (Demo)"},
-  {name:"Study Assistant",icon:"📚",desc:"Understand topics step by step.",label:"Learning",model:"Study Assistant (Demo)"},
-  {name:"Coding Assistant",icon:"⌘",desc:"Explore code and programming concepts.",label:"Coding",model:"Coding Assistant (Demo)"},
-  {name:"Writing Assistant",icon:"✍️",desc:"Draft, improve and organize text.",label:"Writing",model:"Writing Assistant (Demo)"},
-  {name:"Research Assistant",icon:"⌕",desc:"Organize research questions and ideas.",label:"Research",model:"General Assistant (Demo)"},
-  {name:"Creative Studio",icon:"✧",desc:"Brainstorm concepts and creative projects.",label:"Creative",model:"General Assistant (Demo)"}
+  {name:"AI Chat",icon:"✦",desc:"Explore ideas, ask questions and organize your thinking.",category:"Learn",assistant:"General Assistant (Demo)",prompt:"Help me break a big idea into three manageable steps."},
+  {name:"Study Assistant",icon:"▤",desc:"Learn topics with simple explanations and practice questions.",category:"Learn",assistant:"Study Assistant (Demo)",prompt:"Explain a school topic simply, then give me three practice questions."},
+  {name:"Coding Assistant",icon:"⌘",desc:"Practice programming and understand code concepts.",category:"Build",assistant:"Coding Assistant (Demo)",prompt:"Give me one beginner programming challenge without the answer."},
+  {name:"Writing Assistant",icon:"✎",desc:"Plan, draft and improve clear writing.",category:"Create",assistant:"Writing Assistant (Demo)",prompt:"Help me outline a short piece of writing."},
+  {name:"Research Assistant",icon:"⌕",desc:"Structure questions and plan what to investigate.",category:"Learn",assistant:"Research Assistant (Demo)",prompt:"Help me create research questions for a topic."},
+  {name:"Creative Studio",icon:"✧",desc:"Brainstorm product ideas, stories and creative projects.",category:"Create",assistant:"Creative Assistant (Demo)",prompt:"Give me a framework to brainstorm an original project."}
 ];
 
-const grid = document.getElementById("toolGrid");
-tools.forEach(tool => {
-  const card = document.createElement("article");
-  card.className = "card";
-  card.innerHTML = `
-    <div class="card-top">
-      <div class="tool-icon">${tool.icon}</div>
-      <span class="pill">${tool.label}</span>
-    </div>
-    <h3>${tool.name}</h3>
-    <p>${tool.desc}</p>
-    <button class="btn secondary">Explore tool →</button>
-  `;
-  card.querySelector("button").addEventListener("click", () => openChat(tool.model));
-  grid.appendChild(card);
+const $ = id => document.getElementById(id);
+let activeFilter = "All";
+let toastTimer;
+let lastFocused = null;
+
+function makeElement(tag, text, className) {
+  const element = document.createElement(tag);
+  element.textContent = text;
+  if (className) element.className = className;
+  return element;
+}
+
+function renderTools() {
+  const query = $("toolSearch").value.trim().toLowerCase();
+  const grid = $("toolGrid");
+  const filtered = tools.filter(tool =>
+    (activeFilter === "All" || tool.category === activeFilter) &&
+    (tool.name + " " + tool.desc + " " + tool.category).toLowerCase().includes(query)
+  );
+  grid.replaceChildren();
+
+  if (!filtered.length) {
+    grid.append(makeElement("div", "No tools match your search. Try another word.", "empty"));
+    return;
+  }
+
+  filtered.forEach(tool => {
+    const card = makeElement("article", "", "card");
+    const top = makeElement("div", "", "card-top");
+    top.append(makeElement("div", tool.icon, "tool-icon"));
+    top.append(makeElement("span", tool.category, "pill"));
+    card.append(top);
+    card.append(makeElement("h3", tool.name));
+    card.append(makeElement("p", tool.desc));
+
+    const bottom = makeElement("div", "", "card-bottom");
+    bottom.append(makeElement("span", "DEMO TOOL", "small-text"));
+    const button = makeElement("button", "Open assistant ↗", "text-btn");
+    button.type = "button";
+    button.addEventListener("click", () => openChat(tool.assistant, tool.prompt));
+    bottom.append(button);
+    card.append(bottom);
+    grid.append(card);
+  });
+}
+
+function showToast(message) {
+  const toast = $("toast");
+  toast.textContent = message;
+  toast.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove("show"), 2200);
+}
+
+function openModal(modal) {
+  lastFocused = document.activeElement;
+  modal.classList.add("show");
+  const focusTarget = modal.querySelector("input,select,button");
+  if (focusTarget) focusTarget.focus();
+}
+
+function closeModal(modal) {
+  modal.classList.remove("show");
+  if (lastFocused && typeof lastFocused.focus === "function") lastFocused.focus();
+}
+
+function openChat(assistant = "General Assistant (Demo)", prompt = "") {
+  $("assistantSelect").value = assistant;
+  $("question").value = prompt;
+  openModal($("chatModal"));
+  $("question").focus();
+}
+
+function addMessage(text, type) {
+  const bubble = makeElement("div", text, "msg " + type);
+  $("messages").append(bubble);
+  $("messages").scrollTop = $("messages").scrollHeight;
+}
+
+function resetChat() {
+  $("messages").replaceChildren();
+  addMessage("New demo conversation. Choose a sample prompt or type a message. Replies are simulated.", "bot");
+}
+
+function getDemoReply(question, assistant) {
+  const q = question.toLowerCase();
+
+  if (q.includes("code") || q.includes("program")) {
+    return "DEMO TEMPLATE — Coding\n1. Describe the goal in one sentence.\n2. Split it into small steps.\n3. Test one step at a time.\n\nThis is sample text, not a live AI answer.";
+  }
+
+  if (q.includes("study") || q.includes("explain") || q.includes("learn")) {
+    return "DEMO TEMPLATE — Learning\n• Start with the main idea.\n• Connect it to a familiar example.\n• Test your understanding with a question.\n\nThis is sample text, not a live AI answer.";
+  }
+
+  if (q.includes("plan") || q.includes("project")) {
+    return "DEMO TEMPLATE — Planning\n1. Define the result you want.\n2. Choose the smallest useful first step.\n3. Ask someone for feedback.\n\nThis is sample text, not a live AI answer.";
+  }
+
+  return "Thanks for trying " + assistant + ". This prototype demonstrates the chat interface only. A properly licensed AI model would need to be connected through a secure backend to generate real answers.";
+}
+
+function copyText(text) {
+  if (!text || !text.trim()) {
+    showToast("Nothing to copy yet.");
+    return;
+  }
+
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text)
+      .then(() => showToast("Copied to clipboard."))
+      .catch(() => fallbackCopy(text));
+  } else {
+    fallbackCopy(text);
+  }
+}
+
+function fallbackCopy(text) {
+  const area = document.createElement("textarea");
+  area.value = text;
+  area.style.position = "fixed";
+  area.style.opacity = "0";
+  document.body.append(area);
+  area.select();
+
+  try {
+    const success = document.execCommand("copy");
+    showToast(success ? "Copied to clipboard." : "Copy unavailable in this browser.");
+  } catch (error) {
+    showToast("Copy unavailable in this browser.");
+  }
+  area.remove();
+}
+
+/* Navigation and tool filtering */
+$("openWorkspace").addEventListener("click", () => openChat());
+$("heroStart").addEventListener("click", () => openChat());
+$("toolSearch").addEventListener("input", renderTools);
+
+$("filters").addEventListener("click", event => {
+  const button = event.target.closest("[data-filter]");
+  if (!button) return;
+  activeFilter = button.dataset.filter;
+  document.querySelectorAll("#filters .filter").forEach(item => {
+    item.classList.toggle("active", item === button);
+  });
+  renderTools();
 });
 
-const chatModal = document.getElementById("chatModal");
-const planModal = document.getElementById("planModal");
-const modelSelect = document.getElementById("modelSelect");
-const messages = document.getElementById("messages");
+document.querySelectorAll(".quick[data-prompt]").forEach(button => {
+  button.addEventListener("click", () => openChat("General Assistant (Demo)", button.dataset.prompt));
+});
 
-function openChat(model) {
-  chatModal.classList.add("show");
-  modelSelect.value = model;
-  document.getElementById("modelLabel").textContent = "Interactive interface preview";
-  document.getElementById("question").focus();
-}
-function closeChat(){chatModal.classList.remove("show")}
-function closePlan(){planModal.classList.remove("show")}
+document.querySelectorAll(".samplePrompt").forEach(button => {
+  button.addEventListener("click", () => {
+    $("question").value = button.dataset.prompt;
+    $("question").focus();
+  });
+});
 
-function subscribe(plan) {
-  document.getElementById("planTitle").textContent = plan + " plan";
-  document.getElementById("planText").textContent =
-    "You selected the " + plan + " example plan. Real subscriptions are not enabled in this prototype.";
-  planModal.classList.add("show");
-}
-
-document.getElementById("chatForm").addEventListener("submit", event => {
+/* Demo chat */
+$("chatForm").addEventListener("submit", event => {
   event.preventDefault();
-  const input = document.getElementById("question");
+  const input = $("question");
   const question = input.value.trim();
   if (!question) return;
 
   addMessage(question, "user");
   input.value = "";
-
-  const answer =
-    "This is a demo response, not a live AI answer. Your question was received by the prototype. In the next phase, we can connect a properly licensed AI model to generate real answers.";
-  addMessage(answer, "bot");
+  addMessage(getDemoReply(question, $("assistantSelect").value), "bot");
 });
 
-function addMessage(text, type) {
-  const bubble = document.createElement("div");
-  bubble.className = "msg " + type;
-  bubble.textContent = text;
-  messages.appendChild(bubble);
-  messages.scrollTop = messages.scrollHeight;
-}
+$("newChat").addEventListener("click", resetChat);
+$("clearChat").addEventListener("click", resetChat);
+$("closeChat").addEventListener("click", () => closeModal($("chatModal")));
 
-[chatModal,planModal].forEach(modal => {
-  modal.addEventListener("click", event => {
-    if(event.target === modal) modal.classList.remove("show");
+$("copyChat").addEventListener("click", () => {
+  const transcript = [...$("messages").querySelectorAll(".msg")]
+    .map(message => (message.classList.contains("user") ? "You: " : "Nexa demo: ") + message.textContent)
+    .join("\n\n");
+  copyText(transcript);
+});
+
+/* Local project workbench — no network request */
+$("makeBrief").addEventListener("click", () => {
+  const goal = $("briefInput").value.trim();
+  if (!goal) {
+    showToast("Enter a goal first.");
+    $("briefInput").focus();
+    return;
+  }
+
+  $("briefOutput").textContent =
+    "PROJECT BRIEF (DEMO)\n\n" +
+    "Goal\n" + goal + "\n\n" +
+    "First steps\n" +
+    "1. Identify who this helps and which problem it solves.\n" +
+    "2. Build the smallest testable version.\n" +
+    "3. Ask a few people for feedback and improve it.\n\n" +
+    "Progress check\n" +
+    "Write one clear result that shows your first version is useful.\n\n" +
+    "Note: This is a local template, not AI-generated content.";
+});
+
+$("clearBrief").addEventListener("click", () => {
+  $("briefInput").value = "";
+  $("briefOutput").textContent = "Your project brief will appear here.";
+});
+
+$("copyBrief").addEventListener("click", () => copyText($("briefOutput").textContent));
+
+/* Sample plan previews — not a checkout */
+document.querySelectorAll(".planBtn").forEach(button => {
+  button.addEventListener("click", () => {
+    $("planTitle").textContent = button.dataset.plan + " plan preview";
+    $("planText").textContent =
+      "You selected the " + button.dataset.plan +
+      " example plan. This is a product-design preview only. No subscription or checkout is active.";
+    openModal($("planModal"));
   });
 });
+
+$("closePlan").addEventListener("click", () => closeModal($("planModal")));
+$("dismissPlan").addEventListener("click", () => closeModal($("planModal")));
+
+[$("chatModal"), $("planModal")].forEach(modal => {
+  modal.addEventListener("click", event => {
+    if (event.target === modal) closeModal(modal);
+  });
+});
+
 document.addEventListener("keydown", event => {
-  if(event.key === "Escape") {
-    closeChat();
-    closePlan();
+  if (event.key === "Escape") {
+    [$("chatModal"), $("planModal")].forEach(modal => {
+      if (modal.classList.contains("show")) closeModal(modal);
+    });
   }
 });
+
+renderTools();
 </script>
 </body>
 </html>
