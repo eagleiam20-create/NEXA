@@ -4,904 +4,767 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#090b12">
-<title>NEXA AI — Explore Beyond</title>
-<meta name="description" content="Nexa is a browser-based knowledge explorer with separate research tools and premium plan previews.">
+<meta name="theme-color" content="#090b14">
+<title>NEXA — Your Ideas, Unlocked</title>
 
 <style>
 :root{
-  --bg:#090b12;
-  --surface:#111522;
-  --surface2:#171c2d;
-  --line:#272d42;
-  --text:#f4f5ff;
-  --muted:#9ca4bd;
-  --purple:#9c83ff;
-  --cyan:#67e8f9;
-  --pink:#ff78bc;
-  --green:#6ee7b7;
-  --radius:18px;
+  --bg:#080a12;
+  --panel:#101421;
+  --panel2:#151a2b;
+  --text:#f5f6ff;
+  --muted:#a0a8c0;
+  --purple:#9a7bff;
+  --cyan:#62e7ef;
+  --pink:#ff76bd;
+  --line:rgba(255,255,255,.09);
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth;scroll-padding-top:85px}
+html{scroll-behavior:smooth}
 body{
-  margin:0;
-  background:
-    radial-gradient(ellipse at 10% 0%,#8c72ff12,transparent 40%),
-    radial-gradient(ellipse at 90% 25%,#4de4ff09,transparent 35%),
-    var(--bg);
+  margin:0;background:
+  radial-gradient(ellipse at 15% 0%,rgba(119,74,255,.15),transparent 38%),
+  radial-gradient(ellipse at 90% 40%,rgba(42,191,211,.08),transparent 32%),
+  var(--bg);
   color:var(--text);
-  font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
-  line-height:1.65;
+  font-family:Inter,Segoe UI,Arial,sans-serif;
+  min-height:100vh;
 }
-button,input,textarea{font:inherit}
-button,a{-webkit-tap-highlight-color:transparent}
-a{color:var(--cyan);text-decoration:none}
-a:hover{text-decoration:underline}
+button,input,textarea,select{font:inherit}
 button{cursor:pointer}
-button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{
+button:focus-visible,input:focus-visible,textarea:focus-visible{
   outline:2px solid var(--cyan);outline-offset:3px
 }
-.container{width:min(1120px,91%);margin:auto}
-header{
-  position:sticky;top:0;z-index:20;
-  background:#090b12e8;backdrop-filter:blur(16px);
-  border-bottom:1px solid #ffffff0d
+a{color:var(--cyan);text-decoration:none}
+a:hover{text-decoration:underline}
+::selection{background:#8f72ff;color:white}
+
+.ambient{
+  position:fixed;width:270px;height:270px;border-radius:50%;
+  filter:blur(100px);opacity:.12;pointer-events:none;z-index:-1;
+  animation:float 12s ease-in-out infinite alternate;
 }
-.nav{
-  min-height:72px;display:flex;align-items:center;
-  justify-content:space-between;gap:20px
+.ambient.one{background:#8657ff;top:8%;left:-130px}
+.ambient.two{background:#39d8e4;right:-150px;bottom:8%;animation-delay:-5s}
+@keyframes float{to{transform:translate(80px,-45px) scale(1.25)}}
+@keyframes appear{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{50%{box-shadow:0 0 35px #8f72ff22}}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.topbar{
+  height:76px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 6%;border-bottom:1px solid var(--line);
+  background:rgba(8,10,18,.72);backdrop-filter:blur(20px);
+  position:sticky;top:0;z-index:20
 }
-.logo{font-size:23px;font-weight:950;letter-spacing:2px;color:white}
-.logo span{color:var(--purple)}
-nav{display:flex;align-items:center;gap:20px}
-nav a{font-size:13px;color:var(--muted)}
-.btn{
-  display:inline-flex;align-items:center;justify-content:center;gap:8px;
-  border:1px solid transparent;border-radius:11px;padding:11px 16px;
-  color:#090b12;background:linear-gradient(110deg,var(--purple),var(--cyan));
-  font-weight:800;font-size:13px;text-decoration:none;transition:.2s;
+.brand{display:flex;align-items:center;gap:11px;font-size:21px;font-weight:850;letter-spacing:2px}
+.logo{
+  width:39px;height:39px;border-radius:13px;
+  display:grid;place-items:center;font-size:22px;
+  background:linear-gradient(135deg,var(--purple),#5bdfe9);
+  color:#090b14;box-shadow:0 0 28px #9a7bff30
 }
-.btn:hover{transform:translateY(-1px);text-decoration:none;filter:brightness(1.08)}
-.btn.secondary{
-  background:#ffffff05;color:var(--text);border-color:var(--line)
-}
-.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
-.small-btn{padding:8px 11px;font-size:12px}
-.hero{
-  display:grid;grid-template-columns:1.2fr .8fr;align-items:center;
-  gap:40px;padding-top:68px;padding-bottom:65px;min-height:440px
-}
-.eyebrow{
-  color:var(--cyan);font-size:11px;font-weight:850;
-  letter-spacing:2px;text-transform:uppercase
-}
-h1{
-  font-size:clamp(42px,6.8vw,76px);line-height:1.04;
-  letter-spacing:-3.7px;margin:16px 0
-}
+.brand small{display:block;font-size:10px;letter-spacing:2px;color:var(--muted);font-weight:500;margin-top:3px}
+.top-actions{display:flex;align-items:center;gap:12px}
+.status{font-size:12px;color:#8ff5ce;display:flex;align-items:center;gap:7px}
+.dot{width:7px;height:7px;background:#63efb2;border-radius:50%;box-shadow:0 0 10px #63efb2}
+
+main{max-width:1240px;margin:auto;padding:36px 5% 130px}
+.page{display:none;animation:appear .4s ease both}
+.page.active{display:block}
+.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:2.6px;color:var(--cyan);font-weight:750}
+h1{font-size:clamp(34px,6vw,66px);line-height:1.06;letter-spacing:-2px;margin:17px 0}
+h2{font-size:clamp(25px,4vw,36px);letter-spacing:-.7px;margin:12px 0}
+h3{margin:0 0 9px;font-size:17px}
+p{line-height:1.7;color:var(--muted)}
 .gradient-text{
-  background:linear-gradient(100deg,var(--purple),var(--cyan),var(--pink));
+  background:linear-gradient(95deg,#fff 5%,#c6b6ff 43%,#66e8ef 90%);
   -webkit-background-clip:text;background-clip:text;color:transparent
 }
-.hero-copy{color:var(--muted);max-width:570px;font-size:16px}
-.hero-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:23px}
-.status-line{
-  display:flex;align-items:center;gap:9px;
-  color:var(--muted);font-size:12px;margin-top:20px
+.hero{padding:50px 0 40px;max-width:850px}
+.hero p{font-size:16px;max-width:610px}
+.hero-orb{
+  width:100px;height:100px;border-radius:50%;margin:30px 0;
+  background:radial-gradient(circle at 35% 30%,white 0,#b6a4ff 10%,#7654ed 40%,#17172f 72%);
+  box-shadow:0 0 35px #9272ff55,0 0 100px #9272ff20;
+  animation:pulse 4s ease-in-out infinite
 }
-.dot{
-  width:7px;height:7px;display:inline-block;flex-shrink:0;
-  border-radius:50%;background:var(--green);box-shadow:0 0 12px #6ee7b777
+.section-head{display:flex;align-items:end;justify-content:space-between;gap:20px;margin:30px 0 18px}
+.section-head p{margin:0;font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}
+.card{
+  background:linear-gradient(145deg,rgba(24,29,47,.94),rgba(13,16,28,.96));
+  border:1px solid var(--line);border-radius:21px;padding:23px;
+  transition:transform .25s,border-color .25s,background .25s;
+  min-width:0
 }
-.orb-wrap{min-height:300px;display:grid;place-items:center;position:relative}
-.orb{
-  width:min(270px,70vw);aspect-ratio:1;border-radius:50%;
-  background:
-    radial-gradient(circle at 30% 25%,#ffffffc9,transparent 4%),
-    radial-gradient(circle at 35% 28%,#a9f4ff,#9b7dff 25%,#2a2860 52%,#0a0d19 72%);
-  box-shadow:0 0 50px #a18aff25,0 0 110px #57e8ff12,inset -20px -22px 45px #0008;
-  position:relative;animation:float 6s ease-in-out infinite
+.card:hover{transform:translateY(-4px);border-color:#9a7bff66;background:#171b2d}
+.tool-card{cursor:pointer;position:relative;overflow:hidden;min-height:185px}
+.tool-card:after{
+  content:"";position:absolute;width:100px;height:100px;border-radius:50%;
+  right:-55px;bottom:-55px;background:var(--glow,#8c70ff);filter:blur(45px);opacity:.25
 }
-.orb:before,.orb:after{
-  content:"";position:absolute;inset:-13px;border:1px solid #9c83ff55;
-  border-radius:50%;transform:rotateX(66deg) rotateZ(-22deg)
+.tool-icon{
+  width:48px;height:48px;border-radius:15px;display:grid;place-items:center;
+  font-size:23px;background:#ffffff09;border:1px solid var(--line);margin-bottom:22px
 }
-.orb:after{inset:-28px;border-color:#67e8f929;transform:rotateX(70deg) rotateZ(32deg)}
-.orb-label{
-  position:absolute;bottom:10px;color:var(--muted);
-  letter-spacing:3px;font-size:10px
+.tool-card p{font-size:13px;margin-bottom:0}
+.arrow{color:var(--cyan);float:right;font-size:20px}
+.button{
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  border:1px solid transparent;border-radius:13px;padding:13px 19px;
+  background:linear-gradient(110deg,#a28aff,#65e1ed);color:#090b14;
+  font-weight:800;transition:transform .2s,filter .2s
 }
-@keyframes float{50%{transform:translateY(-12px) rotate(5deg)}}
-section{padding:43px 0}
-.section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin-bottom:22px}
-h2{font-size:clamp(27px,4vw,39px);line-height:1.2;letter-spacing:-1.4px;margin:7px 0}
-h3{line-height:1.3}
-.section-head p{max-width:700px;color:var(--muted);font-size:14px;margin:9px 0 0}
-.panel,.tool-card{
-  border:1px solid var(--line);border-radius:var(--radius);
-  background:linear-gradient(145deg,#141929e8,#0e111ce8);
-  padding:23px
+.button:hover{transform:translateY(-2px);filter:brightness(1.08)}
+.button.secondary{background:#ffffff08;color:var(--text);border-color:var(--line)}
+.button.small{padding:9px 13px;font-size:12px}
+.button:disabled{opacity:.5;cursor:wait;transform:none}
+.input,.textarea,.select{
+  width:100%;padding:15px 16px;border-radius:13px;
+  border:1px solid var(--line);background:#090c16;color:var(--text);
 }
-.field-label{display:block;font-size:13px;font-weight:750;margin-bottom:9px}
-.search-row{display:flex;gap:10px}
-input[type="search"],textarea{
-  width:100%;min-width:0;background:#090c16;color:var(--text);
-  border:1px solid var(--line);border-radius:11px;padding:14px;
-}
-input::placeholder,textarea::placeholder{color:#747d98}
-.quick-prompts{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.input::placeholder,.textarea::placeholder{color:#727b94}
+.textarea{min-height:125px;resize:vertical;line-height:1.6}
+.field{margin:16px 0}
+.field label{display:block;color:#dfe2f3;font-size:13px;margin-bottom:9px}
+.searchbar{display:flex;gap:10px;margin-top:25px}
+.searchbar .input{flex:1;min-width:0}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}
 .chip{
-  background:#ffffff04;border:1px solid var(--line);color:#c5cbe0;
-  border-radius:999px;padding:7px 11px;font-size:11px
+  background:#ffffff07;border:1px solid var(--line);color:#d5d9ec;
+  padding:9px 12px;border-radius:30px;font-size:12px
 }
 .chip:hover{border-color:var(--purple);color:white}
-.results{display:grid;gap:13px;margin-top:18px}
-.empty-state{
-  border:1px dashed var(--line);border-radius:13px;padding:28px 18px;
-  text-align:center;color:var(--muted);font-size:13px
+.panel{border:1px solid var(--line);border-radius:23px;background:#111523bd;padding:25px;margin:20px 0}
+.result-list{display:grid;gap:12px;margin-top:20px}
+.result{
+  padding:19px;border-radius:16px;border:1px solid var(--line);
+  background:#ffffff04;animation:appear .3s ease both
 }
-.result-card{
-  padding:19px;border:1px solid var(--line);border-radius:14px;
-  background:#ffffff03;overflow-wrap:anywhere
-}
-.result-label{
-  font-size:10px;color:var(--cyan);font-weight:850;
-  letter-spacing:1.4px;text-transform:uppercase
-}
-.result-card h3{font-size:20px;margin:7px 0}
-.result-card p{color:#c1c7d9;font-size:14px;line-height:1.8;margin:10px 0}
-.result-card a{display:inline-block;margin-top:7px;font-size:12px;font-weight:750}
-.small{font-size:12px;color:var(--muted)}
-.notice{
-  margin-top:16px;border-left:3px solid var(--cyan);
-  padding:11px 14px;background:#78e7ff08;color:var(--muted);font-size:12px
-}
-.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
-.tool-card{display:flex;flex-direction:column;align-items:flex-start;min-height:220px}
-.tool-icon{
-  display:grid;place-items:center;width:43px;height:43px;border-radius:13px;
-  background:linear-gradient(135deg,#9c83ff22,#67e8f915);
-  border:1px solid #9c83ff35;font-size:20px
-}
-.tool-card h3{font-size:17px;margin:15px 0 6px}
-.tool-card p{font-size:13px;color:var(--muted);margin:0 0 15px}
-.tool-card button{margin-top:auto}
-.workbench{display:grid;grid-template-columns:1fr 1fr;gap:15px}
-textarea{min-height:130px;resize:vertical}
-.work-output{
-  min-height:180px;padding:15px;border:1px solid var(--line);
-  background:#090c16;border-radius:12px;white-space:pre-wrap;
-  color:#c7cde0;font-size:13px;overflow-wrap:anywhere
-}
-.feature-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
-.feature h3{margin:12px 0 5px}
-.feature p{margin:0;color:var(--muted);font-size:13px}
-.usage-strip{
-  display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;
-  gap:10px;padding:13px 15px;border:1px solid var(--line);
-  border-radius:12px;color:var(--muted);font-size:12px
-}
-.pricing-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
-.price-card{
-  display:flex;flex-direction:column;gap:10px;padding:20px;
-  border:1px solid var(--line);border-radius:17px;
-  background:linear-gradient(145deg,#171a2d,#0c0f1c)
-}
-.price-card.featured{border-color:var(--purple);box-shadow:0 0 28px #a18aff18}
-.price-card h3{margin:0;font-size:17px}
-.price{font-size:30px;line-height:1.2;font-weight:900;letter-spacing:-1px}
-.price-card small{color:var(--muted);font-size:12px}
-.price-card ul{margin:0;padding-left:18px;color:var(--muted);font-size:12px}
-.price-card li{margin:7px 0}
-.price-card .btn{width:100%;margin-top:auto}
-.popular-tag{
-  align-self:flex-start;padding:4px 8px;border-radius:6px;
-  background:#a18aff20;color:#d9ceff;font-size:10px;
-  font-weight:900;letter-spacing:.7px;text-transform:uppercase
-}
-.upgrade-box{
-  margin-bottom:18px;padding:19px;border:1px solid #8e78ec80;
-  border-radius:15px;background:linear-gradient(135deg,#20183b,#111424)
-}
-.upgrade-box h3{margin:0 0 7px}
-.upgrade-box p{color:var(--muted);font-size:13px;margin:0 0 13px}
-footer{border-top:1px solid var(--line);padding:28px 0;color:var(--muted);font-size:12px}
-.footer-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px}
-.toast{
-  position:fixed;bottom:20px;left:50%;z-index:60;max-width:90%;
-  transform:translate(-50%,20px);opacity:0;pointer-events:none;
-  padding:12px 18px;border:1px solid var(--line);border-radius:12px;
-  background:#191d2e;color:white;transition:.2s;font-size:13px
-}
-.toast.show{opacity:1;transform:translate(-50%,0)}
+.result h3{line-height:1.45}
+.result p{font-size:14px;margin:8px 0}
+.meta{font-size:11px;color:#8892af;margin-bottom:8px}
+.result-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:13px}
+.empty{text-align:center;padding:36px 15px;color:var(--muted)}
 .hidden{display:none!important}
-@media(max-width:900px){
-  .pricing-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .hero{gap:20px}
+.notice{font-size:12px;color:#9ba6c1}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.feature-banner{
+  padding:27px;border-radius:22px;border:1px solid #9a7bff30;
+  background:linear-gradient(120deg,#9a7bff12,#60e6ef08);margin:25px 0
 }
-@media(max-width:760px){
-  nav{gap:10px}
-  nav a:not(.nav-cta){display:none}
-  .hero{grid-template-columns:1fr;padding-top:40px;gap:5px}
-  h1{letter-spacing:-2px}
-  .orb-wrap{min-height:250px}
-  .orb{width:190px}
-  .grid,.feature-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .workbench{grid-template-columns:1fr}
-  .section-head{align-items:flex-start;flex-direction:column}
+.step{display:flex;gap:14px;margin:20px 0}
+.step-number{
+  flex:0 0 35px;height:35px;display:grid;place-items:center;border-radius:11px;
+  background:#9276ff1c;border:1px solid #9276ff55;color:#c7b8ff;font-weight:800
 }
-@media(max-width:480px){
-  .container{width:91%}
-  .nav{min-height:62px}
-  .logo{font-size:20px}
-  .nav-cta{padding:9px 11px;font-size:12px}
-  .hero{min-height:auto;padding-bottom:30px}
-  .hero-copy{font-size:14px}
-  .orb-wrap{min-height:220px}
-  section{padding:32px 0}
-  .panel{padding:16px}
-  .search-row{flex-direction:column}
-  .search-row .btn{width:100%}
-  .grid,.feature-grid,.pricing-grid{grid-template-columns:1fr}
-  .tool-card{min-height:auto}
-  .tool-card button{margin-top:12px}
-  .footer-inner{align-items:flex-start;flex-direction:column}
+.step p{margin:5px 0 0;font-size:13px}
+.plan-layout{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:20px;align-items:start}
+.plan-image{
+  min-height:300px;border:1px solid var(--line);border-radius:20px;overflow:hidden;
+  background:linear-gradient(135deg,#1b1740,#102932);display:grid;place-items:center
 }
-@media(prefers-reduced-motion:reduce){
-  *,*::before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}
+.plan-image img{width:100%;height:330px;object-fit:cover;display:block}
+.plan-image-placeholder{text-align:center;padding:35px}
+.plan-image-placeholder .big{font-size:65px}
+.plan-image-placeholder p{font-size:13px}
+.plan-output h3{margin-top:24px}
+.plan-output ul{padding-left:20px;color:#c8cde0;line-height:1.9;font-size:14px}
+.budget{font-size:30px;font-weight:850;letter-spacing:-1px}
+.tag{display:inline-block;border:1px solid #65e7ef35;color:var(--cyan);padding:6px 10px;border-radius:20px;font-size:11px;margin:4px 4px 4px 0}
+.footer{border-top:1px solid var(--line);margin-top:45px;padding-top:25px;color:#737e99;font-size:12px;text-align:center}
+
+/* Distinct floating bottom navigation */
+.bottom-nav{
+  position:fixed;z-index:30;bottom:18px;left:50%;transform:translateX(-50%);
+  width:min(720px,calc(100% - 26px));display:flex;justify-content:space-around;
+  gap:4px;padding:9px;background:rgba(16,19,32,.88);
+  border:1px solid #ffffff17;border-radius:22px;
+  box-shadow:0 14px 60px #0009;backdrop-filter:blur(24px)
+}
+.nav-item{
+  flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;
+  gap:5px;border:0;background:transparent;color:#8e97b0;
+  padding:8px 3px;border-radius:14px;font-size:10px;transition:.2s
+}
+.nav-icon{font-size:19px;line-height:1.1}
+.nav-item.active{color:white;background:linear-gradient(140deg,#9878ff30,#61e8ef14)}
+.nav-item.active .nav-icon{filter:drop-shadow(0 0 7px #a28aff)}
+.toast{
+  position:fixed;bottom:105px;left:50%;transform:translateX(-50%);
+  z-index:60;background:#e7fff5;color:#10231d;padding:12px 18px;
+  border-radius:13px;font-size:13px;font-weight:700;box-shadow:0 8px 30px #0006;
+  max-width:90%;text-align:center
+}
+.loading{display:inline-block;width:17px;height:17px;border:2px solid #ffffff30;border-top-color:var(--cyan);border-radius:50%;animation:spin .8s linear infinite;vertical-align:middle}
+@media(max-width:850px){
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .plan-layout,.split{grid-template-columns:1fr}
+  main{padding-top:25px}
+}
+@media(max-width:520px){
+  .topbar{height:65px;padding:0 17px}
+  .brand{font-size:18px}
+  .brand small{font-size:9px}
+  .status{font-size:10px}
+  main{padding:22px 16px 125px}
+  .hero{padding:32px 0 20px}
+  h1{letter-spacing:-1.5px}
+  .grid{grid-template-columns:1fr 1fr;gap:10px}
+  .card{padding:16px;border-radius:17px}
+  .tool-card{min-height:165px}
+  .tool-icon{margin-bottom:15px}
+  .tool-card h3{font-size:14px}
+  .tool-card p{font-size:12px}
+  .searchbar{flex-direction:column}
+  .searchbar .button{width:100%}
+  .panel{padding:17px}
+  .section-head{align-items:start;flex-direction:column}
+  .bottom-nav{bottom:9px;width:calc(100% - 14px);padding:6px;border-radius:18px}
+  .nav-item{font-size:9px;padding:8px 1px}
+  .nav-icon{font-size:17px}
+  .plan-image{min-height:230px}
+  .plan-image img{height:250px}
 }
 </style>
 </head>
 
 <body>
-<header>
-  <div class="container nav">
-    <a class="logo" href="#" aria-label="Nexa home">NEXA<span>.</span></a>
-    <nav aria-label="Main navigation">
-      <a href="#search">Knowledge</a>
-      <a href="#tools">Tools</a>
-      <a href="#workbench">Workbench</a>
-      <a href="#pricing" class="btn nav-cta">Premium ↗</a>
-    </nav>
+<div class="ambient one"></div>
+<div class="ambient two"></div>
+
+<header class="topbar">
+  <div class="brand">
+    <div class="logo">N</div>
+    <div>NEXA<small>YOUR IDEAS, UNLOCKED</small></div>
+  </div>
+  <div class="top-actions">
+    <span class="status"><span class="dot"></span> OPEN ACCESS</span>
   </div>
 </header>
 
 <main>
-  <section class="container hero">
-    <div>
-      <div class="eyebrow">Your knowledge workspace</div>
-      <h1>Discover more.<br><span class="gradient-text">Think bigger.</span></h1>
-      <p class="hero-copy">
-        Explore knowledge, research new topics, study concepts and organize
-        project ideas in one futuristic workspace.
-      </p>
-      <div class="hero-actions">
-        <a class="btn" href="#search">Start exploring →</a>
-        <a class="btn secondary" href="#tools">Explore tools</a>
-      </div>
-      <div class="status-line"><span class="dot"></span> Browser-based reference search</div>
+  <!-- HOME -->
+  <section class="page active" id="page-home">
+    <div class="hero">
+      <div class="eyebrow">A workspace for curious minds</div>
+      <h1>Think bigger.<br><span class="gradient-text">Build something real.</span></h1>
+      <p>Research a topic, learn a new skill, explore code, or turn your own idea into a practical action plan. Start anywhere.</p>
+      <div class="hero-orb" aria-hidden="true"></div>
+      <button class="button" onclick="navigate('plan')">✦ Build my idea <span>↗</span></button>
+      <button class="button secondary" onclick="navigate('search')">Explore knowledge</button>
     </div>
-    <div class="orb-wrap" aria-label="Animated Nexa orb">
-      <div class="orb"></div>
-      <div class="orb-label">NEXA / EXPLORE</div>
+
+    <div class="section-head">
+      <div><div class="eyebrow">Your workspace</div><h2>Choose your next move</h2></div>
+      <p>Free to explore. No search counter.</p>
+    </div>
+    <div class="grid">
+      <article class="card tool-card" style="--glow:#7e6bff" onclick="navigate('search')">
+        <div class="tool-icon">⌕</div><span class="arrow">↗</span>
+        <h3>Knowledge Search</h3><p>Look up topics and explore reference sources.</p>
+      </article>
+      <article class="card tool-card" style="--glow:#48dce9" onclick="navigate('study')">
+        <div class="tool-icon">◈</div><span class="arrow">↗</span>
+        <h3>Study Space</h3><p>Find learning resources and study topics.</p>
+      </article>
+      <article class="card tool-card" style="--glow:#ff76bd" onclick="navigate('code')">
+        <div class="tool-icon">⌘</div><span class="arrow">↗</span>
+        <h3>Coding Lab</h3><p>Explore programming concepts and technologies.</p>
+      </article>
+      <article class="card tool-card" style="--glow:#ffbf70" onclick="navigate('research')">
+        <div class="tool-icon">◎</div><span class="arrow">↗</span>
+        <h3>Research Desk</h3><p>Collect references before making decisions.</p>
+      </article>
+      <article class="card tool-card" style="--glow:#65e7bc" onclick="navigate('writing')">
+        <div class="tool-icon">✎</div><span class="arrow">↗</span>
+        <h3>Writing Studio</h3><p>Research topics before drafting your writing.</p>
+      </article>
+      <article class="card tool-card" style="--glow:#ff7e7e" onclick="navigate('ideas')">
+        <div class="tool-icon">✧</div><span class="arrow">↗</span>
+        <h3>Idea Explorer</h3><p>Investigate a concept and its possibilities.</p>
+      </article>
+    </div>
+
+    <div class="feature-banner">
+      <div class="eyebrow">Your idea deserves a roadmap</div>
+      <h2>From “what if?” to “what next?”</h2>
+      <p>Describe what you want to build. Get a starter roadmap, suggested tools, budget guidance, and a relevant reference image.</p>
+      <button class="button" onclick="navigate('plan')">Open Build Your Plan ↗</button>
     </div>
   </section>
 
-  <section class="container" id="search">
-    <div class="section-head">
-      <div>
-        <div class="eyebrow">Knowledge explorer</div>
-        <h2>What do you want to <span class="gradient-text">know?</span></h2>
-        <p>Search for a question or topic. Nexa finds matching reference articles and presents them in a clean reading format.</p>
-      </div>
-    </div>
-
+  <!-- UNIVERSAL SEARCH -->
+  <section class="page" id="page-search">
+    <div class="eyebrow">Explore the world</div>
+    <h1>Knowledge <span class="gradient-text">Search.</span></h1>
+    <p>Search any topic. Keep exploring without a search-use limit.</p>
     <div class="panel">
-      <form id="searchForm">
-        <label class="field-label" for="question">Ask a question or search a topic</label>
-        <div class="search-row">
-          <input id="question" type="search" maxlength="300" placeholder="e.g. What is photosynthesis?" autocomplete="off" required>
-          <button class="btn" id="searchButton" type="submit">Search ↗</button>
+      <form id="search-form">
+        <div class="searchbar">
+          <input class="input" id="search-query" placeholder="Search science, history, technology..." required>
+          <button class="button" id="search-button" type="submit">Search ↗</button>
         </div>
       </form>
-
-      <div class="quick-prompts" aria-label="Suggested searches">
-        <button class="chip" data-query="Photosynthesis">🌱 Photosynthesis</button>
-        <button class="chip" data-query="Artificial intelligence">✦ Artificial intelligence</button>
-        <button class="chip" data-query="Albert Einstein">⚛ Albert Einstein</button>
-        <button class="chip" data-query="Python programming language">⌘ Python</button>
-        <button class="chip" data-query="Solar System">🪐 Solar System</button>
+      <div class="chips">
+        <button class="chip" onclick="quickSearch('Artificial intelligence')">Artificial intelligence</button>
+        <button class="chip" onclick="quickSearch('Space exploration')">Space</button>
+        <button class="chip" onclick="quickSearch('Renewable energy')">Renewable energy</button>
+        <button class="chip" onclick="quickSearch('Python programming')">Python</button>
       </div>
+    </div>
+    <div id="search-status" class="notice" aria-live="polite"></div>
+    <div id="search-results" class="result-list"></div>
+  </section>
 
-      <div id="searchStatus" class="status-line" role="status" aria-live="polite">
-        <span class="dot"></span> Ready to search. Internet connection required.
+  <!-- STUDY -->
+  <section class="page" id="page-study">
+    <div class="eyebrow">Learn with direction</div>
+    <h1>Study <span class="gradient-text">Space.</span></h1>
+    <p>Discover concepts, biographies, scientific ideas, and reference material for your next study session.</p>
+    <div class="panel">
+      <form data-search-form="study">
+        <div class="field"><label for="study-topic">What are you learning?</label><input id="study-topic" class="input" placeholder="e.g. Motion, cells, algebra, planets" required></div>
+        <button class="button" type="submit">Find study resources ↗</button>
+      </form>
+      <div class="chips">
+        <button class="chip" onclick="setAndSearch('study-topic','Physics')">Physics</button>
+        <button class="chip" onclick="setAndSearch('study-topic','Biology')">Biology</button>
+        <button class="chip" onclick="setAndSearch('study-topic','Mathematics')">Mathematics</button>
+        <button class="chip" onclick="setAndSearch('study-topic','World history')">History</button>
       </div>
+    </div>
+    <div id="study-output" class="result-list"></div>
+    <div class="feature-banner"><h3>Study tip</h3><p>Read a reliable reference, explain the idea in your own words, and then test yourself with practice questions.</p></div>
+  </section>
 
-      <div id="results" class="results" aria-live="polite">
-        <div class="empty-state">
-          <strong>Your discoveries appear here.</strong>
-          <p>Search a topic to see article summaries and source links.</p>
+  <!-- CODING -->
+  <section class="page" id="page-code">
+    <div class="eyebrow">Build your skills</div>
+    <h1>Coding <span class="gradient-text">Lab.</span></h1>
+    <p>Explore programming languages, frameworks, algorithms, and software engineering concepts.</p>
+    <div class="panel">
+      <form data-search-form="code">
+        <div class="field"><label for="code-topic">What do you want to understand?</label><input id="code-topic" class="input" placeholder="e.g. Python lists, HTML, JavaScript" required></div>
+        <button class="button" type="submit">Explore coding topics ↗</button>
+      </form>
+      <div class="chips">
+        <button class="chip" onclick="setAndSearch('code-topic','Python programming language')">Python</button>
+        <button class="chip" onclick="setAndSearch('code-topic','HTML web development')">HTML</button>
+        <button class="chip" onclick="setAndSearch('code-topic','JavaScript programming language')">JavaScript</button>
+        <button class="chip" onclick="setAndSearch('code-topic','Computer programming algorithms')">Algorithms</button>
+      </div>
+    </div>
+    <div id="code-output" class="result-list"></div>
+    <div class="notice">These are reference lookups, not an AI code generator or a code execution environment.</div>
+  </section>
+
+  <!-- RESEARCH -->
+  <section class="page" id="page-research">
+    <div class="eyebrow">Investigate thoughtfully</div>
+    <h1>Research <span class="gradient-text">Desk.</span></h1>
+    <p>Start with a question, collect useful references, and keep track of what you still need to verify.</p>
+    <div class="panel">
+      <form data-search-form="research">
+        <div class="field"><label for="research-topic">Your research question or topic</label><textarea id="research-topic" class="textarea" placeholder="e.g. How can solar power help small communities?" required></textarea></div>
+        <button class="button" type="submit">Find reference material ↗</button>
+      </form>
+    </div>
+    <div id="research-output" class="result-list"></div>
+    <div class="feature-banner"><h3>Research checklist</h3>
+      <div class="step"><div class="step-number">1</div><div><b>Collect</b><p>Find more than one credible source.</p></div></div>
+      <div class="step"><div class="step-number">2</div><div><b>Compare</b><p>Check dates, evidence, and different viewpoints.</p></div></div>
+      <div class="step"><div class="step-number">3</div><div><b>Verify</b><p>Confirm important claims with primary sources.</p></div></div>
+    </div>
+  </section>
+
+  <!-- WRITING -->
+  <section class="page" id="page-writing">
+    <div class="eyebrow">Words with purpose</div>
+    <h1>Writing <span class="gradient-text">Studio.</span></h1>
+    <p>Explore a subject before writing an essay, article, presentation, speech, or project report.</p>
+    <div class="panel">
+      <form data-search-form="writing">
+        <div class="field"><label for="writing-topic">What are you writing about?</label><input id="writing-topic" class="input" placeholder="e.g. Benefits of reading books" required></div>
+        <div class="field"><label for="writing-type">Writing type</label>
+          <select id="writing-type" class="select">
+            <option>Essay</option><option>Article</option><option>Presentation</option>
+            <option>Speech</option><option>Project report</option>
+          </select>
         </div>
-      </div>
-
-      <div class="notice">
-        Transparency: this version retrieves reference information from Wikipedia.
-        It is not a generative AI model and cannot answer every question like ChatGPT.
-        Use the source links to verify important information.
-      </div>
+        <button class="button" type="submit">Research my topic ↗</button>
+      </form>
     </div>
+    <div id="writing-output" class="result-list"></div>
+    <div class="notice">This page finds topic references. It does not automatically write a complete AI-generated essay.</div>
   </section>
 
-  <section class="container" id="tools">
-    <div class="section-head">
-      <div>
-        <div class="eyebrow">Separate tools</div>
-        <h2>One space. <span class="gradient-text">More possibilities.</span></h2>
-        <p>Each tool has its own free-use counter in this demo. When its limit is reached, Nexa shows the plans.</p>
-      </div>
+  <!-- IDEAS -->
+  <section class="page" id="page-ideas">
+    <div class="eyebrow">Explore what's possible</div>
+    <h1>Idea <span class="gradient-text">Explorer.</span></h1>
+    <p>Investigate an invention, business concept, science question, or technology you are curious about.</p>
+    <div class="panel">
+      <form data-search-form="ideas">
+        <div class="field"><label for="ideas-topic">Your idea or curiosity</label><textarea id="ideas-topic" class="textarea" placeholder="e.g. A low-cost device to save water" required></textarea></div>
+        <button class="button" type="submit">Explore the concept ↗</button>
+      </form>
     </div>
-
-    <div class="grid">
-      <article class="tool-card">
-        <div class="tool-icon">✦</div>
-        <h3>Knowledge Search</h3>
-        <p>Look up people, concepts and factual topics.</p>
-        <button class="btn secondary small-btn" data-feature="knowledge" data-focus-search="Artificial intelligence">Open tool ↗</button>
-      </article>
-
-      <article class="tool-card">
-        <div class="tool-icon">▤</div>
-        <h3>Study Explorer</h3>
-        <p>Find reference material for school subjects and concepts.</p>
-        <button class="btn secondary small-btn" data-feature="study" data-focus-search="Science">Open tool ↗</button>
-      </article>
-
-      <article class="tool-card">
-        <div class="tool-icon">⌘</div>
-        <h3>Coding Reference</h3>
-        <p>Explore programming languages and computer science.</p>
-        <button class="btn secondary small-btn" data-feature="coding" data-focus-search="Python programming language">Open tool ↗</button>
-      </article>
-
-      <article class="tool-card">
-        <div class="tool-icon">⌕</div>
-        <h3>Research Starter</h3>
-        <p>Find background information for a research topic.</p>
-        <button class="btn secondary small-btn" data-feature="research" data-focus-search="Climate change">Open tool ↗</button>
-      </article>
-
-      <article class="tool-card">
-        <div class="tool-icon">✎</div>
-        <h3>Writing Research</h3>
-        <p>Collect reference information before planning your writing.</p>
-        <button class="btn secondary small-btn" data-feature="writing" data-focus-search="Communication">Open tool ↗</button>
-      </article>
-
-      <article class="tool-card">
-        <div class="tool-icon">◇</div>
-        <h3>Idea Explorer</h3>
-        <p>Discover concepts that may inspire a project.</p>
-        <button class="btn secondary small-btn" data-feature="ideas" data-focus-search="Renewable energy">Open tool ↗</button>
-      </article>
-    </div>
+    <div id="ideas-output" class="result-list"></div>
+    <button class="button secondary" onclick="navigate('plan')">Turn an idea into a plan →</button>
   </section>
 
-  <section class="container" id="workbench">
-    <div class="section-head">
-      <div>
-        <div class="eyebrow">Project workbench</div>
-        <h2>Turn an idea into a <span class="gradient-text">plan.</span></h2>
-        <p>Create a simple project outline in your browser. This uses a fixed template, not AI generation.</p>
-      </div>
-    </div>
+  <!-- BUILD PLAN -->
+  <section class="page" id="page-plan">
+    <div class="eyebrow">Your personal project canvas</div>
+    <h1>Build Your <span class="gradient-text">Plan.</span></h1>
+    <p>Tell NEXA what you want to make. Get a practical starter roadmap and a relevant image to help visualise your idea.</p>
 
-    <div class="workbench">
+    <div class="plan-layout">
       <div class="panel">
-        <label class="field-label" for="projectGoal">What do you want to build?</label>
-        <textarea id="projectGoal" maxlength="1500" placeholder="Example: A website that helps students revise science."></textarea>
-        <div class="hero-actions">
-          <button class="btn" id="makePlan">Create outline</button>
-          <button class="btn secondary" id="clearPlan">Clear</button>
-        </div>
+        <form id="plan-form">
+          <div class="field">
+            <label for="plan-idea">1. Describe your idea</label>
+            <textarea id="plan-idea" class="textarea" placeholder="Example: I want to build a simple app that helps students organise homework..." required></textarea>
+          </div>
+          <div class="field">
+            <label for="plan-goal">2. What is your main goal?</label>
+            <select class="select" id="plan-goal">
+              <option value="learn">Learn a new skill</option>
+              <option value="project">Build an app or product</option>
+              <option value="business">Start a small business</option>
+              <option value="school">Complete a school project</option>
+              <option value="community">Help people solve a problem</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="plan-budget">3. Starting budget</label>
+            <select class="select" id="plan-budget">
+              <option value="0">₹0 — free tools only</option>
+              <option value="500">Up to ₹500</option>
+              <option value="2000">Up to ₹2,000</option>
+              <option value="5000">Up to ₹5,000</option>
+              <option value="flexible">Flexible budget</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="plan-level">4. Your current level</label>
+            <select class="select" id="plan-level">
+              <option value="beginner">Beginner</option>
+              <option value="some">I know a little</option>
+              <option value="experienced">Experienced</option>
+            </select>
+          </div>
+          <button class="button" id="plan-button" type="submit">✦ Create my roadmap</button>
+          <p class="notice">Your roadmap is generated in your browser using a structured starter template. The image is searched from Wikimedia Commons; it may be illustrative rather than an exact match.</p>
+        </form>
       </div>
-      <div class="panel">
-        <div class="section-head">
-          <h3 style="margin:0">Your project outline</h3>
-          <button class="btn secondary small-btn" id="copyPlan">Copy</button>
-        </div>
-        <div class="work-output" id="planOutput" aria-live="polite">Your outline will appear here.</div>
-      </div>
-    </div>
-  </section>
 
-  <section class="container">
-    <div class="section-head">
-      <div><div class="eyebrow">Designed for focus</div><h2>Simple by design.</h2></div>
-    </div>
-    <div class="feature-grid">
-      <article class="panel feature">
-        <div class="tool-icon">⚡</div><h3>Lightweight</h3>
-        <p>Vanilla HTML, CSS and JavaScript. No UI framework required.</p>
-      </article>
-      <article class="panel feature">
-        <div class="tool-icon">🔎</div><h3>Source links</h3>
-        <p>Open reference pages to read further and verify details.</p>
-      </article>
-      <article class="panel feature">
-        <div class="tool-icon">🔐</div><h3>Transparent</h3>
-        <p>No hidden AI claims and no payment credentials in the frontend.</p>
-      </article>
-    </div>
-  </section>
-
-  <section class="container" id="pricing">
-    <div class="section-head">
       <div>
-        <div class="eyebrow">Nexa membership</div>
-        <h2>Choose your <span class="gradient-text">access level.</span></h2>
-        <p>These are proposed demo plans. Checkout is not active yet.</p>
+        <div class="plan-image" id="plan-image">
+          <div class="plan-image-placeholder">
+            <div class="big">✧</div>
+            <h3>Your idea, visualised</h3>
+            <p>Write your idea and create a roadmap to see a related image here.</p>
+          </div>
+        </div>
+        <div class="panel plan-output hidden" id="plan-output" aria-live="polite"></div>
       </div>
     </div>
-
-    <div class="usage-strip">
-      <span id="usageSummary">Free preview: 5 uses per tool, 2 project outlines.</span>
-      <span>Demo mode · no payment is taken</span>
-    </div>
-
-    <div id="upgradeBox" class="upgrade-box hidden" role="status" aria-live="polite">
-      <h3 id="upgradeTitle">Free limit reached</h3>
-      <p id="upgradeMessage">Choose a plan to compare the proposed access options.</p>
-      <a class="btn" href="#pricing">Compare plans ↓</a>
-    </div>
-
-    <div class="pricing-grid" style="margin-top:16px">
-      <article class="price-card">
-        <h3>Starter</h3><div class="price">₹99</div><small>100 credits · proposed</small>
-        <ul><li>Up to 100 basic searches</li><li>Or 50 coding/research uses</li><li>Or 20 project outlines</li><li>Credits shared across tools</li></ul>
-        <button class="btn secondary" data-plan="Starter">Choose Starter</button>
-      </article>
-
-      <article class="price-card">
-        <h3>Basic</h3><div class="price">₹199</div><small>250 credits · proposed</small>
-        <ul><li>Up to 250 basic searches</li><li>Or 125 coding/research uses</li><li>Or 50 project outlines</li><li>Credits shared across tools</li></ul>
-        <button class="btn secondary" data-plan="Basic">Choose Basic</button>
-      </article>
-
-      <article class="price-card">
-        <h3>Plus</h3><div class="price">₹499</div><small>750 credits · proposed</small>
-        <ul><li>Up to 750 basic searches</li><li>Or 375 coding/research uses</li><li>Or 150 project outlines</li><li>Credits shared across tools</li></ul>
-        <button class="btn secondary" data-plan="Plus">Choose Plus</button>
-      </article>
-
-      <article class="price-card featured">
-        <span class="popular-tag">Popular</span>
-        <h3>Pro</h3><div class="price">₹999</div><small>1,800 credits · proposed</small>
-        <ul><li>Up to 1,800 basic searches</li><li>Or 900 coding/research uses</li><li>Or 360 project outlines</li><li>Credits shared across tools</li></ul>
-        <button class="btn" data-plan="Pro">Choose Pro</button>
-      </article>
-
-      <article class="price-card">
-        <h3>Pro Max</h3><div class="price">₹1,999</div><small>4,000 credits · proposed</small>
-        <ul><li>Up to 4,000 basic searches</li><li>Or 2,000 coding/research uses</li><li>Or 800 project outlines</li><li>Credits shared across tools</li></ul>
-        <button class="btn secondary" data-plan="Pro Max">Choose Pro Max</button>
-      </article>
-
-      <article class="price-card">
-        <h3>Ultra</h3><div class="price">₹2,999</div><small>7,000 credits · proposed</small>
-        <ul><li>Up to 7,000 basic searches</li><li>Or 3,500 coding/research uses</li><li>Or 1,400 project outlines</li><li>Credits shared across tools</li></ul>
-        <button class="btn secondary" data-plan="Ultra">Choose Ultra</button>
-      </article>
-
-      <article class="price-card">
-        <h3>Max</h3><div class="price">₹5,999</div><small>16,000 credits · proposed</small>
-        <ul><li>Up to 16,000 basic searches</li><li>Or 8,000 coding/research uses</li><li>Or 3,200 project outlines</li><li>Credits shared across tools</li></ul>
-        <button class="btn secondary" data-plan="Max">Choose Max</button>
-      </article>
-
-      <article class="price-card featured">
-        <span class="popular-tag">2-year access</span>
-        <h3>Nexa Premium</h3><div class="price">₹9,999</div><small>24,000 credits · valid 2 years</small>
-        <ul><li>Up to 24,000 basic searches</li><li>Or 12,000 coding/research uses</li><li>Or 4,800 project outlines</li><li>Access for 24 months</li></ul>
-        <button class="btn" data-plan="2-Year">Choose 2-Year</button>
-      </article>
-    </div>
-
-    <div class="notice">
-      Important: plan credits and prices are proposals, not active purchases.
-      This demo stores free-use counters in the browser, so they can be reset.
-      Real paid access needs verified checkout, user accounts and server-side
-      credit checks. Do not sell these plans as working AI access until those
-      systems and the advertised features actually work.
-    </div>
   </section>
+
+  <footer class="footer">
+    NEXA · An independent learning and planning workspace<br>
+    Reference results are retrieved from public Wikimedia services. NEXA is not affiliated with Wikipedia.
+  </footer>
 </main>
 
-<footer>
-  <div class="container footer-inner">
-    <div class="logo">NEXA<span>.</span></div>
-    <div>Browser-based knowledge explorer · Prototype</div>
-    <div>Reference content from Wikipedia.</div>
-  </div>
-</footer>
+<nav class="bottom-nav" aria-label="Main navigation">
+  <button class="nav-item active" data-page="home" onclick="navigate('home')"><span class="nav-icon">⌂</span>Home</button>
+  <button class="nav-item" data-page="search" onclick="navigate('search')"><span class="nav-icon">⌕</span>Search</button>
+  <button class="nav-item" data-page="study" onclick="navigate('study')"><span class="nav-icon">◈</span>Study</button>
+  <button class="nav-item" data-page="code" onclick="navigate('code')"><span class="nav-icon">⌘</span>Code</button>
+  <button class="nav-item" data-page="research" onclick="navigate('research')"><span class="nav-icon">◎</span>Research</button>
+  <button class="nav-item" data-page="plan" onclick="navigate('plan')"><span class="nav-icon">✦</span>Build</button>
+  <button class="nav-item" data-page="ideas" onclick="navigate('ideas')"><span class="nav-icon">✧</span>Ideas</button>
+</nav>
 
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div id="toast" class="toast hidden" role="status"></div>
 
 <script>
-"use strict";
-
-const $ = id => document.getElementById(id);
-
-const FREE_LIMITS = {
-  knowledge: 5,
-  study: 5,
-  coding: 5,
-  research: 5,
-  writing: 5,
-  ideas: 5,
-  workbench: 2
-};
-
-const FEATURE_NAMES = {
-  knowledge: "Knowledge Search",
-  study: "Study Explorer",
-  coding: "Coding Reference",
-  research: "Research Starter",
-  writing: "Writing Research",
-  ideas: "Idea Explorer",
-  workbench: "Project Workbench"
-};
-
+const $ = (id) => document.getElementById(id);
 let toastTimer;
 
-function showToast(message) {
-  const toast = $("toast");
-  toast.textContent = message;
-  toast.classList.add("show");
+function notify(message) {
+  const el = $("toast");
+  el.textContent = message;
+  el.classList.remove("hidden");
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => toast.classList.remove("show"), 2600);
+  toastTimer = setTimeout(() => el.classList.add("hidden"), 2600);
 }
 
-// Demo-only counters. Browser storage is NOT secure payment enforcement.
-function readUsage() {
-  try {
-    return JSON.parse(localStorage.getItem("nexaFeatureUsage") || "{}");
-  } catch (error) {
-    return {};
-  }
-}
+function navigate(page) {
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  const target = $("page-" + page);
+  if (target) target.classList.add("active");
 
-function getUsage(feature) {
-  return Number(readUsage()[feature] || 0);
-}
-
-function saveUsage(feature) {
-  const usage = readUsage();
-  usage[feature] = Number(usage[feature] || 0) + 1;
-
-  try {
-    localStorage.setItem("nexaFeatureUsage", JSON.stringify(usage));
-  } catch (error) {}
-
-  updateUsageSummary();
-}
-
-function updateUsageSummary() {
-  const label = $("usageSummary");
-  if (!label) return;
-
-  const usage = readUsage();
-  label.textContent = "Free uses remaining — " +
-    Object.keys(FREE_LIMITS).map(feature => {
-      const remaining = Math.max(
-        0,
-        FREE_LIMITS[feature] - Number(usage[feature] || 0)
-      );
-      return FEATURE_NAMES[feature] + ": " + remaining;
-    }).join(" · ");
-}
-
-function showUpgrade(feature) {
-  const box = $("upgradeBox");
-  const title = $("upgradeTitle");
-  const message = $("upgradeMessage");
-
-  title.textContent =
-    (FEATURE_NAMES[feature] || "This feature") + " — free limit reached";
-
-  message.textContent =
-    "You have used the free preview for this feature. Compare the proposed plans below. Checkout is not connected, so you cannot purchase a plan here yet.";
-
-  box.classList.remove("hidden");
-  box.scrollIntoView({ behavior: "smooth", block: "center" });
-}
-
-function canUseFeature(feature) {
-  const limit = FREE_LIMITS[feature] ?? 5;
-
-  if (getUsage(feature) >= limit) {
-    showUpgrade(feature);
-    showToast("Free limit reached for " + (FEATURE_NAMES[feature] || "this feature") + ".");
-    return false;
-  }
-
-  return true;
-}
-
-document.addEventListener("click", event => {
-  const planButton = event.target.closest("[data-plan]");
-  if (planButton) {
-    showToast("Checkout is not connected yet. No payment has been taken.");
-  }
-});
-
-function setSearchStatus(message, loading = false) {
-  const status = $("searchStatus");
-  status.replaceChildren();
-
-  const dot = document.createElement("span");
-  dot.className = "dot";
-
-  if (loading) {
-    dot.style.background = "var(--purple)";
-    dot.style.boxShadow = "0 0 12px #a18aff88";
-  }
-
-  status.append(dot);
-  status.append(document.createTextNode(message));
-}
-
-function makeTextElement(tag, text, className) {
-  const element = document.createElement(tag);
-  element.textContent = text;
-  if (className) element.className = className;
-  return element;
-}
-
-function makeLink(url, label) {
-  const link = document.createElement("a");
-  link.href = url;
-  link.textContent = label;
-  link.target = "_blank";
-  link.rel = "noopener noreferrer";
-  return link;
-}
-
-function showEmpty(message, query = "") {
-  const results = $("results");
-  results.replaceChildren();
-
-  const box = makeTextElement("div", "", "empty-state");
-  box.append(makeTextElement("strong", message));
-
-  if (query) {
-    box.append(document.createElement("br"));
-    box.append(makeLink(
-      "https://duckduckgo.com/?q=" + encodeURIComponent(query),
-      "Try a web search ↗"
-    ));
-  }
-
-  results.append(box);
-}
-
-function renderResults(pages, query) {
-  const results = $("results");
-  results.replaceChildren();
-
-  if (!pages.length) {
-    showEmpty("No matching article was found.", query);
-    return;
-  }
-
-  pages.forEach(page => {
-    const card = makeTextElement("article", "", "result-card");
-
-    card.append(makeTextElement("span", "Knowledge result", "result-label"));
-    card.append(makeTextElement("h3", page.title || "Untitled result"));
-
-    if (page.description) {
-      card.append(makeTextElement("p", page.description));
-    }
-
-    if (page.extract) {
-      card.append(makeTextElement("p", page.extract));
-    }
-
-    const url = page.url ||
-      ("https://en.wikipedia.org/wiki/" +
-      encodeURIComponent((page.title || "").replace(/ /g, "_")));
-
-    card.append(makeLink(url, "Read source article ↗"));
-    results.append(card);
+  document.querySelectorAll(".nav-item").forEach(b => {
+    b.classList.toggle("active", b.dataset.page === page);
   });
-
-  results.append(makeTextElement(
-    "p",
-    "These are reference summaries, not AI-generated answers.",
-    "small"
-  ));
+  window.scrollTo({top: 0, behavior: "smooth"});
+  history.replaceState(null, "", "#" + page);
 }
 
-async function searchKnowledge(query, feature = "knowledge") {
-  const cleanQuery = query.trim();
+function safeText(value) {
+  return String(value ?? "").replace(/[&<>"']/g, c => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+  }[c]));
+}
 
-  if (!cleanQuery) {
-    showToast("Enter a question or topic first.");
-    $("question").focus();
-    return;
-  }
+function wikiSearchUrl(query) {
+  return "https://en.wikipedia.org/w/index.php?search=" + encodeURIComponent(query);
+}
 
-  if (!canUseFeature(feature)) return;
+async function searchReferences(query, outputId, statusId) {
+  query = query.trim();
+  if (!query) return;
 
-  $("question").value = cleanQuery;
-  $("searchButton").disabled = true;
-  $("searchButton").textContent = "Searching…";
-  setSearchStatus("Searching Wikipedia for relevant articles…", true);
-  showEmpty("Searching knowledge sources…");
+  const output = $(outputId);
+  const status = statusId ? $(statusId) : null;
+  output.innerHTML = '<div class="panel"><span class="loading"></span> Searching public references...</div>';
+  if (status) status.textContent = "Looking up reference material…";
 
   try {
-    const searchURL =
-      "https://en.wikipedia.org/w/api.php" +
-      "?action=query" +
-      "&list=search" +
-      "&srsearch=" + encodeURIComponent(cleanQuery) +
-      "&srlimit=5" +
-      "&format=json" +
-      "&origin=*";
+    const url = "https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch="
+      + encodeURIComponent(query)
+      + "&gsrnamespace=0&gsrlimit=8&prop=extracts|info&exintro=1&explaintext=1&exchars=650&inprop=url&format=json&origin=*";
 
-    const response = await fetch(searchURL);
-
-    if (!response.ok) throw new Error("Search request failed");
-
+    const response = await fetch(url);
+    if (!response.ok) throw new Error("Search service unavailable");
     const data = await response.json();
-    const hits = data.query?.search || [];
+    const pages = Object.values(data.query?.pages || {})
+      .sort((a,b) => (a.index || 0) - (b.index || 0));
 
-    if (!hits.length) {
-      setSearchStatus("No matching Wikipedia articles found.");
-      showEmpty("No matching article was found.", cleanQuery);
+    if (!pages.length) {
+      output.innerHTML = '<div class="panel"><h3>No matching references found</h3><p>Try another phrase or use the direct search link.</p><a target="_blank" rel="noopener" href="' + wikiSearchUrl(query) + '">Search this topic on Wikipedia ↗</a></div>';
+      if (status) status.textContent = "No matching reference pages returned.";
       return;
     }
 
-    const detailsURL =
-      "https://en.wikipedia.org/w/api.php" +
-      "?action=query" +
-      "&pageids=" + hits.map(hit => hit.pageid).join("|") +
-      "&prop=extracts|info" +
-      "&exintro=1" +
-      "&explaintext=1" +
-      "&exchars=900" +
-      "&inprop=url" +
-      "&format=json" +
-      "&origin=*";
+    output.innerHTML = pages.map(page => {
+      const link = page.fullurl || ("https://en.wikipedia.org/?curid=" + page.pageid);
+      return '<article class="result">'
+        + '<div class="meta">PUBLIC REFERENCE · WIKIPEDIA</div>'
+        + '<h3>' + safeText(page.title) + '</h3>'
+        + '<p>' + safeText(page.extract || "Open the reference to read more.") + '</p>'
+        + '<div class="result-actions"><a class="button small" target="_blank" rel="noopener" href="' + link + '">Read reference ↗</a>'
+        + '<button class="button small secondary" onclick="copyText(' + JSON.stringify(link) + ')">Copy link</button></div>'
+        + '</article>';
+    }).join("");
 
-    const detailsResponse = await fetch(detailsURL);
-
-    if (!detailsResponse.ok) throw new Error("Article details unavailable");
-
-    const details = await detailsResponse.json();
-    const pagesById = details.query?.pages || {};
-
-    const pages = hits.map(hit => {
-      const page = pagesById[hit.pageid] || {};
-
-      return {
-        title: page.title || hit.title,
-        description: hit.snippet
-          ? hit.snippet.replace(/<[^>]*>/g, "")
-          : "",
-        extract: page.extract || "",
-        url: page.fullurl ||
-          ("https://en.wikipedia.org/wiki/" +
-          encodeURIComponent((hit.title || "").replace(/ /g, "_")))
-      };
-    });
-
-    renderResults(pages, cleanQuery);
-    saveUsage(feature);
-    setSearchStatus("Found " + pages.length + " related article(s).");
+    if (status) status.textContent = "Showing " + pages.length + " reference results. You can search again whenever you want.";
   } catch (error) {
-    setSearchStatus("Knowledge search is unavailable right now.");
-    showEmpty(
-      "Could not connect to Wikipedia. Check your internet connection or try a web search.",
-      cleanQuery
-    );
-  } finally {
-    $("searchButton").disabled = false;
-    $("searchButton").textContent = "Search ↗";
+    output.innerHTML = '<div class="panel"><h3>Could not load results</h3><p>Check your internet connection and try again. You can also open the public search page directly.</p><a target="_blank" rel="noopener" href="' + wikiSearchUrl(query) + '">Open direct search ↗</a></div>';
+    if (status) status.textContent = "The reference service did not respond.";
   }
 }
 
-$("searchForm").addEventListener("submit", event => {
+function quickSearch(query) {
+  $("search-query").value = query;
+  navigate("search");
+  searchReferences(query, "search-results", "search-status");
+}
+
+function setAndSearch(inputId, query) {
+  $(inputId).value = query;
+  const page = inputId.split("-")[0];
+  const outputMap = {
+    study:"study-output", code:"code-output",
+    research:"research-output", writing:"writing-output",
+    ideas:"ideas-output"
+  };
+  searchReferences(query, outputMap[page]);
+}
+
+$("search-form").addEventListener("submit", event => {
   event.preventDefault();
-  searchKnowledge($("question").value, "knowledge");
+  searchReferences($("search-query").value, "search-results", "search-status");
 });
 
-document.querySelectorAll("[data-query]").forEach(button => {
-  button.addEventListener("click", () => {
-    searchKnowledge(button.dataset.query, "knowledge");
+document.querySelectorAll("[data-search-form]").forEach(form => {
+  form.addEventListener("submit", event => {
+    event.preventDefault();
+    const page = form.dataset.searchForm;
+    const fieldMap = {
+      study:"study-topic", code:"code-topic", research:"research-topic",
+      writing:"writing-topic", ideas:"ideas-topic"
+    };
+    const outputMap = {
+      study:"study-output", code:"code-output", research:"research-output",
+      writing:"writing-output", ideas:"ideas-output"
+    };
+    let query = $(fieldMap[page]).value.trim();
+    if (page === "writing") query += " " + $("writing-type").value;
+    searchReferences(query, outputMap[page]);
   });
-});
-
-document.querySelectorAll("[data-focus-search]").forEach(button => {
-  button.addEventListener("click", () => {
-    const query = button.dataset.focusSearch;
-    const feature = button.dataset.feature || "knowledge";
-
-    $("question").value = query;
-    $("search").scrollIntoView({ behavior: "smooth" });
-    searchKnowledge(query, feature);
-  });
-});
-
-$("makePlan").addEventListener("click", () => {
-  if (!canUseFeature("workbench")) return;
-
-  const goal = $("projectGoal").value.trim();
-
-  if (!goal) {
-    showToast("Write your project goal first.");
-    $("projectGoal").focus();
-    return;
-  }
-
-  $("planOutput").textContent =
-    "PROJECT OUTLINE\n\n" +
-    "YOUR GOAL\n" + goal + "\n\n" +
-    "1. IDENTIFY THE PROBLEM\n" +
-    "Who will use the project, and what problem will it solve?\n\n" +
-    "2. BUILD THE SMALLEST USEFUL VERSION\n" +
-    "Choose only the essential features for version one.\n\n" +
-    "3. TEST IT\n" +
-    "Ask a few people to try it and note where they get stuck.\n\n" +
-    "4. IMPROVE IT\n" +
-    "Fix the most important problems before adding features.\n\n" +
-    "FIRST ACTION\n" +
-    "Write down the one feature you can build and test first.\n\n" +
-    "NOTE: This outline uses a fixed template, not AI generation.";
-
-  saveUsage("workbench");
-});
-
-$("clearPlan").addEventListener("click", () => {
-  $("projectGoal").value = "";
-  $("planOutput").textContent = "Your outline will appear here.";
-  showToast("Workbench cleared.");
 });
 
 async function copyText(text) {
-  if (!text || text === "Your outline will appear here.") {
-    showToast("Nothing to copy yet.");
-    return;
-  }
-
   try {
     await navigator.clipboard.writeText(text);
-    showToast("Copied to clipboard.");
-  } catch (error) {
-    const area = document.createElement("textarea");
-    area.value = text;
-    area.style.position = "fixed";
-    area.style.opacity = "0";
-    document.body.append(area);
-    area.select();
-
-    try {
-      const success = document.execCommand("copy");
-      showToast(success ? "Copied to clipboard." : "Copy is unavailable.");
-    } catch (copyError) {
-      showToast("Copy is unavailable in this browser.");
-    }
-
-    area.remove();
+    notify("Copied to clipboard.");
+  } catch {
+    notify("Copy unavailable here. Select and copy the text manually.");
   }
 }
 
-$("copyPlan").addEventListener("click", () => {
-  copyText($("planOutput").textContent);
+function inferCategory(idea) {
+  const t = idea.toLowerCase();
+  if (/app|website|software|coding|program|digital|platform|ai |artificial intelligence|tool/.test(t)) return "software technology";
+  if (/school|student|homework|study|learn|education|class/.test(t)) return "education learning";
+  if (/solar|energy|electric|climate|water|recycle|environment|farm|agriculture/.test(t)) return "renewable energy environment";
+  if (/space|planet|rocket|universe|astronomy/.test(t)) return "space science";
+  if (/health|hospital|medical|fitness|wellness/.test(t)) return "health science";
+  if (/business|shop|sell|customer|money|market|startup/.test(t)) return "small business";
+  return idea;
+}
+
+function makeRoadmap(idea, goal, budget, level) {
+  const beginner = level === "beginner";
+  const money = budget === "flexible" ? "Decide a spending limit only after validating the idea." :
+    budget === "0" ? "Use free tools first. Avoid paid subscriptions until the idea is validated." :
+    "Treat your budget as a ceiling, not a target. Spend only after testing the idea.";
+
+  let goalName = {
+    learn:"Skill-learning roadmap", project:"Product-building roadmap",
+    business:"Small-business roadmap", school:"School-project roadmap",
+    community:"Community problem-solving roadmap"
+  }[goal];
+
+  let firstSteps = [
+    "Write down the exact problem and who experiences it.",
+    "Talk to 3–5 potential users or people who understand the problem.",
+    "Look at existing solutions and list what is still missing.",
+    "Build the smallest demonstration that tests your main assumption.",
+    "Show the demonstration to real people and ask for specific feedback.",
+    "Improve it using the feedback; keep notes on what worked."
+  ];
+
+  if (goal === "learn") firstSteps = [
+    "Choose one specific skill that supports your idea.",
+    "Find a free beginner course or reliable tutorial.",
+    "Practise for 20–30 minutes a day with small exercises.",
+    "Build one tiny example without copying every line.",
+    "Ask someone to review your work and note what to improve.",
+    "Make a small final project that demonstrates the skill."
+  ];
+  if (goal === "school") firstSteps = [
+    "Write the project question and what you need to demonstrate.",
+    "Find credible references and record their source links.",
+    "Create a short outline with the main points.",
+    "Build the model, demonstration, or presentation.",
+    "Check the facts, spelling, instructions, and required format.",
+    "Practise explaining your work in your own words."
+  ];
+  if (goal === "business") firstSteps = [
+    "Describe the customer and the specific problem you will solve.",
+    "Speak to potential customers before building anything expensive.",
+    "Compare existing options and identify a useful difference.",
+    "Create a basic sample or demonstration using free tools.",
+    "Offer a clearly defined trial to a willing customer, without promising results you cannot deliver.",
+    "Track feedback, costs, time spent, and whether people are willing to pay."
+  ];
+
+  const tools = goal === "school"
+    ? ["A notes document", "Free reference websites", "Slides or a simple poster"]
+    : goal === "business"
+    ? ["A notes/spreadsheet tool", "A free landing page or sample", "A way to collect customer feedback"]
+    : ["A notes document", "A free learning/reference resource", "A simple prototype or demonstration"];
+
+  return {goalName, firstSteps, tools, money,
+    budgetLabel: budget === "flexible" ? "Not specified" : "Up to ₹" + Number(budget).toLocaleString("en-IN")};
+}
+
+async function loadIdeaImage(query) {
+  const box = $("plan-image");
+  box.innerHTML = '<div class="plan-image-placeholder"><span class="loading"></span><p>Looking for a relevant reference image…</p></div>';
+
+  try {
+    const url = "https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch="
+      + encodeURIComponent("filetype:bitmap " + query)
+      + "&gsrnamespace=6&gsrlimit=8&prop=imageinfo&iiprop=url|extmetadata&iiurlwidth=900&format=json&origin=*";
+    const response = await fetch(url);
+    if (!response.ok) throw new Error("Image service unavailable");
+    const data = await response.json();
+    const files = Object.values(data.query?.pages || {});
+    const chosen = files.find(f => f.imageinfo?.[0]?.thumburl) || files.find(f => f.imageinfo?.[0]?.url);
+
+    if (!chosen) throw new Error("No matching image found");
+
+    const info = chosen.imageinfo[0];
+    const imageUrl = info.thumburl || info.url;
+    const pageUrl = info.descriptionurl || "https://commons.wikimedia.org/";
+    const author = info.extmetadata?.Artist?.value || "Contributor";
+    const license = info.extmetadata?.LicenseShortName?.value || "Check source page";
+    box.innerHTML = '<img src="' + imageUrl + '" alt="Reference image related to your idea" loading="lazy">'
+      + '<div style="padding:12px 15px;font-size:11px;color:#a0a8c0">Reference image: '
+      + '<a target="_blank" rel="noopener" href="' + pageUrl + '">View source and licence ↗</a>'
+      + '<br>Attribution information: ' + safeText(author.replace(/<[^>]*>/g, "").slice(0,180))
+      + ' · ' + safeText(license) + '</div>';
+  } catch {
+    box.innerHTML = '<div class="plan-image-placeholder"><div class="big">✦</div><h3>Idea visual</h3><p>No matching image could be loaded. Check your internet connection or try a more specific idea.</p><a target="_blank" rel="noopener" href="https://commons.wikimedia.org/wiki/Special:MediaSearch?type=image&search=' + encodeURIComponent(query) + '">Search images directly ↗</a></div>';
+  }
+}
+
+$("plan-form").addEventListener("submit", async event => {
+  event.preventDefault();
+  const idea = $("plan-idea").value.trim();
+  if (!idea) return;
+
+  const goal = $("plan-goal").value;
+  const budget = $("plan-budget").value;
+  const level = $("plan-level").value;
+  const plan = makeRoadmap(idea, goal, budget, level);
+  const output = $("plan-output");
+  const button = $("plan-button");
+
+  button.disabled = true;
+  button.innerHTML = '<span class="loading"></span> Creating roadmap…';
+
+  output.classList.remove("hidden");
+  output.innerHTML = '<div class="eyebrow">Your starter roadmap</div><h2>' + safeText(plan.goalName) + '</h2>'
+    + '<p><b>Your idea:</b> ' + safeText(idea) + '</p>'
+    + '<span class="tag">' + safeText(plan.budgetLabel) + '</span>'
+    + '<span class="tag">' + safeText(level.charAt(0).toUpperCase() + level.slice(1)) + '</span>'
+    + '<h3>Step-by-step plan</h3>'
+    + plan.firstSteps.map((step, i) => '<div class="step"><div class="step-number">' + (i+1) + '</div><div><b>' + safeText(step) + '</b></div></div>').join("")
+    + '<h3>Suggested starter tools</h3><ul>' + plan.tools.map(tool => '<li>' + safeText(tool) + '</li>').join("") + '</ul>'
+    + '<h3>Budget approach</h3><p>' + safeText(plan.money) + '</p>'
+    + '<h3>How to measure progress</h3><ul><li>Complete one small milestone at a time.</li><li>Get feedback from someone who represents your intended audience.</li><li>Record time, costs, problems, and what you learned.</li></ul>'
+    + '<h3>First action today</h3><p>Write a one-sentence description of the problem and the smallest result you want to demonstrate in the next 7 days.</p>'
+    + '<button class="button small" onclick="copyPlan()">Copy my plan</button>'
+    + '<p class="notice">This is a structured starter template, not a personalised AI-generated business forecast. Validate assumptions before spending money.</p>';
+
+  try {
+    const category = inferCategory(idea);
+    await loadIdeaImage(category);
+  } finally {
+    button.disabled = false;
+    button.textContent = "✦ Create my roadmap";
+    output.scrollIntoView({behavior:"smooth", block:"start"});
+  }
 });
 
-updateUsageSummary();
+async function copyPlan() {
+  const output = $("plan-output");
+  const text = output.innerText;
+  await copyText(text);
+}
+
+// Support direct page links such as index.html#plan
+const initialPage = location.hash.replace("#", "");
+if (initialPage && $("page-" + initialPage)) navigate(initialPage);
 </script>
 </body>
 </html>
